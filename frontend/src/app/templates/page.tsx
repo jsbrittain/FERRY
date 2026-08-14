@@ -25,7 +25,7 @@ export default function TemplatesPage() {
       <h1 className="page-title">Bundle Templates</h1>
       <p style={{ color: "var(--color-text-secondary)", marginBottom: "var(--spacing-lg)", lineHeight: 1.6 }}>
         Downloadable bundle templates. Download, customise with your analysis code,
-        then upload to EpiBridge as a new Analysis Bundle.
+        then upload to FERRY as a new Analysis Bundle.
       </p>
 
       {templates.length === 0 ? (

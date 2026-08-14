@@ -47,7 +47,7 @@ class TestSystemUserSeeding:
     def test_system_users_cannot_authenticate(self, db_session, client):
         seed_auth_framework(db_session)
 
-        emails = ["system@epibridge.internal", "execution_worker@epibridge.internal"]
+        emails = ["system@ferry.internal", "execution_worker@ferry.internal"]
         for email in emails:
             response = client.post(
                 "/api/auth/login",

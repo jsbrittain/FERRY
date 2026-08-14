@@ -1,6 +1,6 @@
 """Context describing the resource being reviewed, supplied to AI
 providers during review. Contains only non-sensitive metadata already
-known to EpiBridge and deliberately excludes project information, user
+known to FERRY and deliberately excludes project information, user
 information, execution history and dataset contents.
 """
 

@@ -1,10 +1,10 @@
 # Users & Roles
 
-Managing users, roles, and capabilities in EpiBridge.
+Managing users, roles, and capabilities in FERRY.
 
 ## Overview
 
-EpiBridge uses a **capability-based** authorisation model. Users are assigned a role at creation, which seeds their initial capabilities. After creation, capabilities become independent of the role — changing a user's role does **not** alter existing capabilities.
+FERRY uses a **capability-based** authorisation model. Users are assigned a role at creation, which seeds their initial capabilities. After creation, capabilities become independent of the role — changing a user's role does **not** alter existing capabilities.
 
 This design means:
 
@@ -14,7 +14,7 @@ This design means:
 
 ## Institutional personas
 
-EpiBridge defines four personas, each mapped to a role with a distinct scope of responsibility:
+FERRY defines four personas, each mapped to a role with a distinct scope of responsibility:
 
 | Persona | Role | Responsibilities |
 |---------|------|------------------|

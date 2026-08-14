@@ -8,7 +8,7 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <span className={styles.brand}>EpiBridge</span>
+      <span className={styles.brand}>FERRY</span>
       <div className={styles.user}>
         {user ? (
           <>

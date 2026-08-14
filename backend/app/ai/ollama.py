@@ -9,7 +9,7 @@ from pathlib import Path
 from app.ai.base import AIProvider, AIReviewResult, ProviderStatus
 from app.ai.context import AIReviewContext
 
-logger = logging.getLogger("epibridge.ai.ollama")
+logger = logging.getLogger("ferry.ai.ollama")
 
 SOURCE_EXTENSIONS = {".py", ".R", ".r", ".sh", ".js", ".ipynb", ".txt", ".md"}
 
@@ -68,7 +68,7 @@ REVIEW_RESPONSE_SCHEMA = {
 
 REVIEW_PROMPT = (
     "You are an assistant reviewing an uploaded Analysis Bundle "
-    "for the EpiBridge secure research platform. "
+    "for the FERRY secure research platform. "
     "Your purpose is to help researchers and platform reviewers "
     "understand what this bundle appears to do based only on "
     "the supplied metadata and source code. "
@@ -114,7 +114,7 @@ REVIEW_PROMPT = (
 
 OUTPUT_REVIEW_PROMPT = (
     "You are an assistant reviewing an Output Set for the "
-    "EpiBridge secure research platform. "
+    "FERRY secure research platform. "
     "Your purpose is to help institutional moderators understand "
     "what the reviewed human-readable files appear to contain based "
     "solely on the supplied files. "

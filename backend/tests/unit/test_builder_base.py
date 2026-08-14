@@ -19,12 +19,12 @@ class TestBuildResult:
     def test_all_fields(self):
         r = BuildResult(
             success=True,
-            image_reference="epibridge/builds/python-3.13:abc123",
+            image_reference="ferry/builds/python-3.13:abc123",
             build_log="Step 1: ...",
             duration_seconds=12.5,
         )
         assert r.success is True
-        assert r.image_reference == "epibridge/builds/python-3.13:abc123"
+        assert r.image_reference == "ferry/builds/python-3.13:abc123"
         assert r.build_log == "Step 1: ..."
         assert r.duration_seconds == 12.5
 

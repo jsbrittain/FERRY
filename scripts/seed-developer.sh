@@ -10,4 +10,4 @@ echo "Seeding developer account..."
 docker compose exec -T backend python -m app.cli seed-developer
 
 echo "Creating test database..."
-docker compose exec -T postgres psql -U epibridge -c "CREATE DATABASE epibridge_test;" 2>/dev/null || true
+docker compose exec -T postgres psql -U ferry -c "CREATE DATABASE ferry_test;" 2>/dev/null || true

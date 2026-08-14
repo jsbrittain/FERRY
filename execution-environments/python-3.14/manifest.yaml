@@ -6,7 +6,7 @@ status: active
 # Institution-specified runtime image. During development, build locally from
 # the Dockerfile in this directory. In production, build and publish to a
 # registry chosen by the institution.
-image_reference: "epibridge/python-3.14:latest"
+image_reference: "ferry/python-3.14:latest"
 validation:
   setup_command: >
     if [ -f /analysis/requirements.txt ]; then

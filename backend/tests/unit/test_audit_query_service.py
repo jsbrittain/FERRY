@@ -106,7 +106,7 @@ class TestQueryAuditEvents:
                 event_type="execution.completed",
                 actor_id=actor_id,
                 actor_display_name="Worker",
-                actor_email="worker@epibridge.internal",
+                actor_email="worker@ferry.internal",
                 project_id=project_id,
                 resource_type="execution_request",
                 resource_id=resource_id,
@@ -123,7 +123,7 @@ class TestQueryAuditEvents:
         assert item["event_type"] == "execution.completed"
         assert item["actor_id"] == actor_id
         assert item["actor_display_name"] == "Worker"
-        assert item["actor_email"] == "worker@epibridge.internal"
+        assert item["actor_email"] == "worker@ferry.internal"
         assert item["project_id"] == project_id
         assert item["resource_type"] == "execution_request"
         assert item["resource_id"] == resource_id

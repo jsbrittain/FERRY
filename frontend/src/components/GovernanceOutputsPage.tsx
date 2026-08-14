@@ -530,7 +530,7 @@ export default function GovernanceOutputsPage() {
                     <strong>Binary artefacts present</strong>
                     <br />
                     This Output Set contains one or more binary artefacts
-                    that cannot be previewed within EpiBridge.
+                    that cannot be previewed within FERRY.
                     These files are available for download if you wish
                     to inspect them using external tools.
                   </div>

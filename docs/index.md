@@ -1,6 +1,6 @@
-# EpiBridge
+# FERRY
 
-Documentation for EpiBridge, a secure remote analysis platform for sensitive epidemiological data.
+Documentation for FERRY, a secure remote analysis platform for sensitive epidemiological data.
 
 ```{toctree}
 :caption: Getting Started

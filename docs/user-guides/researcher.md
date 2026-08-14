@@ -1,6 +1,6 @@
 # Researcher Guide
 
-Task-oriented documentation for researchers using EpiBridge.
+Task-oriented documentation for researchers using FERRY.
 
 ## Who is a Researcher?
 

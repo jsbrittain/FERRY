@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# platform.sh — execution-environment abstraction for EpiBridge
+# platform.sh — execution-environment abstraction for FERRY
 #
-# Reads .epibridge-context to determine the execution target, then
+# Reads .ferry-context to determine the execution target, then
 # dispatches platform operations to the appropriate backend.
 #
 # Usage: ./scripts/platform.sh <command> [args...]
@@ -20,13 +20,13 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# Load execution context.  An explicit EPIBRIDGE_TARGET environment
+# Load execution context.  An explicit FERRY_TARGET environment
 # variable takes precedence — this supports make uninstall TARGET=...
 # when the execution context is missing or stale.
-if [ -z "${EPIBRIDGE_TARGET:-}" ] && [ -f "$REPO_ROOT/.epibridge-context" ]; then
-    . "$REPO_ROOT/.epibridge-context"
+if [ -z "${FERRY_TARGET:-}" ] && [ -f "$REPO_ROOT/.ferry-context" ]; then
+    . "$REPO_ROOT/.ferry-context"
 fi
-EPIBRIDGE_TARGET="${EPIBRIDGE_TARGET:-native}"
+FERRY_TARGET="${FERRY_TARGET:-native}"
 
 # — helpers -----------------------------------------------------------------------
 
@@ -37,27 +37,27 @@ _q() {
 # _run <shell-command-string>
 #   Execute an arbitrary shell command on the platform host.
 _run() {
-    case "$EPIBRIDGE_TARGET" in
+    case "$FERRY_TARGET" in
         native)
             cd "$REPO_ROOT" && eval "$*"
             ;;
         orbstack)
-            VM_DIR="${EPIBRIDGE_VM_DIR:-/opt/epibridge}"
-            ssh -q root@epibridge@orb "cd $VM_DIR && $*"
+            VM_DIR="${FERRY_VM_DIR:-/opt/ferry}"
+            ssh -q root@ferry@orb "cd $VM_DIR && $*"
             ;;
         multipass)
-            VM_DIR="${EPIBRIDGE_VM_DIR:-/opt/epibridge}"
-            EPIBRIDGE_VM="${EPIBRIDGE_VM:-epibridge}"
-            multipass exec "$EPIBRIDGE_VM" -- sudo -u epibridge bash -c "cd $VM_DIR && $*"
+            VM_DIR="${FERRY_VM_DIR:-/opt/ferry}"
+            FERRY_VM="${FERRY_VM:-ferry}"
+            multipass exec "$FERRY_VM" -- sudo -u ferry bash -c "cd $VM_DIR && $*"
             ;;
         remote)
-            local host="${EPIBRIDGE_HOST:?EPIBRIDGE_HOST not set}"
-            local user="${EPIBRIDGE_USER:-epibridge}"
-            local dir="${EPIBRIDGE_DIR:-/opt/epibridge}"
+            local host="${FERRY_HOST:?FERRY_HOST not set}"
+            local user="${FERRY_USER:-ferry}"
+            local dir="${FERRY_DIR:-/opt/ferry}"
             ssh -q "$user@$host" "cd $dir && $*"
             ;;
         *)
-            echo "Unknown EPIBRIDGE_TARGET: $EPIBRIDGE_TARGET" >&2
+            echo "Unknown FERRY_TARGET: $FERRY_TARGET" >&2
             exit 1
             ;;
     esac
@@ -70,7 +70,7 @@ _run() {
 #   are available regardless of how services were started.
 _compose() {
     "$SCRIPT_DIR/prepare-env.sh" 2>/dev/null || true
-    _run "docker compose --env-file ./.env --env-file ./.epibridge-compose.env $(_q "$@")"
+    _run "docker compose --env-file ./.env --env-file ./.ferry-compose.env $(_q "$@")"
 }
 
 # — subcommands -------------------------------------------------------------------
@@ -82,9 +82,9 @@ case "${1:-help}" in
         ;;
 
     start)
-        case "$EPIBRIDGE_TARGET" in
+        case "$FERRY_TARGET" in
             native|remote)
-                echo "No VM to start for $EPIBRIDGE_TARGET target."
+                echo "No VM to start for $FERRY_TARGET target."
                 ;;
             orbstack)
                 "$SCRIPT_DIR/orbstack.sh" start
@@ -93,7 +93,7 @@ case "${1:-help}" in
                 "$SCRIPT_DIR/multipass.sh" start
                 ;;
             *)
-                echo "Don't know how to start $EPIBRIDGE_TARGET environment." >&2
+                echo "Don't know how to start $FERRY_TARGET environment." >&2
                 exit 1
                 ;;
         esac
@@ -110,41 +110,41 @@ case "${1:-help}" in
         ;;
 
     shell)
-        case "$EPIBRIDGE_TARGET" in
+        case "$FERRY_TARGET" in
             native)
                 echo "Already on the platform host." >&2
                 exec "${SHELL:-/bin/sh}"
                 ;;
             orbstack)
-                exec ssh -q root@epibridge@orb
+                exec ssh -q root@ferry@orb
                 ;;
             multipass)
-                EPIBRIDGE_VM="${EPIBRIDGE_VM:-epibridge}"
-                exec multipass exec "$EPIBRIDGE_VM" -- sudo -u epibridge -s
+                FERRY_VM="${FERRY_VM:-ferry}"
+                exec multipass exec "$FERRY_VM" -- sudo -u ferry -s
                 ;;
             remote)
-                local host="${EPIBRIDGE_HOST:?EPIBRIDGE_HOST not set}"
-                local user="${EPIBRIDGE_USER:-epibridge}"
+                local host="${FERRY_HOST:?FERRY_HOST not set}"
+                local user="${FERRY_USER:-ferry}"
                 exec ssh -q "$user@$host"
                 ;;
         esac
         ;;
 
     destroy)
-        case "$EPIBRIDGE_TARGET" in
+        case "$FERRY_TARGET" in
             native|remote)
-                echo "No environment teardown required for $EPIBRIDGE_TARGET target."
+                echo "No environment teardown required for $FERRY_TARGET target."
                 ;;
             orbstack)
-                echo "Deleting OrbStack VM (epibridge)..."
+                echo "Deleting OrbStack VM (ferry)..."
                 "$SCRIPT_DIR/orbstack.sh" delete
                 ;;
             multipass)
-                echo "Deleting Multipass VM (epibridge)..."
+                echo "Deleting Multipass VM (ferry)..."
                 "$SCRIPT_DIR/multipass.sh" delete
                 ;;
             *)
-                echo "Don't know how to destroy $(EPIBRIDGE_TARGET) environment." >&2
+                echo "Don't know how to destroy $(FERRY_TARGET) environment." >&2
                 exit 1
                 ;;
         esac
@@ -162,25 +162,25 @@ case "${1:-help}" in
 
     cp)
         shift
-        case "$EPIBRIDGE_TARGET" in
+        case "$FERRY_TARGET" in
             native)
                 cp "$@"
                 ;;
             orbstack)
-                # The repo is symlinked at /opt/epibridge inside the VM,
+                # The repo is symlinked at /opt/ferry inside the VM,
                 # so files are already shared. This subcommand is a no-op
                 # for OrbStack; use scp if cross-VM copies are needed.
                 echo "Files are shared via the mounted repo. Use scp for explicit copies." >&2
                 ;;
             multipass)
-                # The repo is mounted at /opt/epibridge inside the VM,
+                # The repo is mounted at /opt/ferry inside the VM,
                 # so files are already shared. This subcommand is a no-op
                 # for Multipass; use multipass transfer for explicit copies.
                 echo "Files are shared via the mounted repo. Use multipass transfer for explicit copies." >&2
                 ;;
             remote)
-                local host="${EPIBRIDGE_HOST:?EPIBRIDGE_HOST not set}"
-                local user="${EPIBRIDGE_USER:-epibridge}"
+                local host="${FERRY_HOST:?FERRY_HOST not set}"
+                local user="${FERRY_USER:-ferry}"
                 scp "$user@$host:$1" "${2:-.}" 2>/dev/null || \
                 scp "$1" "$user@$host:${2:-.}"
                 ;;

@@ -2,10 +2,10 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-EPIBRIDGE_HOME="${EPIBRIDGE_HOME:-$(cd "$SCRIPT_DIR/.." && pwd)}"
-COMPOSE_FILE="${EPIBRIDGE_HOME}/docker-compose.yml"
+FERRY_HOME="${FERRY_HOME:-$(cd "$SCRIPT_DIR/.." && pwd)}"
+COMPOSE_FILE="${FERRY_HOME}/docker-compose.yml"
 
-echo "=== EpiBridge Health Check ==="
+echo "=== FERRY Health Check ==="
 
 ERRORS=0
 
@@ -37,8 +37,8 @@ for SERVICE in reverse-proxy frontend backend postgres redis worker; do
 done
 
 # Resolve the reachable URL: explicit env var > execution context > .env > default
-if [ -z "${PUBLIC_URL:-}" ] && [ -f .epibridge-context ]; then
-  PUBLIC_URL="$(sed -n 's/^EPIBRIDGE_REACHABLE_URL=//p' .epibridge-context 2>/dev/null || true)"
+if [ -z "${PUBLIC_URL:-}" ] && [ -f .ferry-context ]; then
+  PUBLIC_URL="$(sed -n 's/^FERRY_REACHABLE_URL=//p' .ferry-context 2>/dev/null || true)"
 fi
 if [ -z "${PUBLIC_URL:-}" ] && [ -f .env ]; then
   PUBLIC_URL="$(sed -n 's/^PUBLIC_URL=//p' .env 2>/dev/null || true)"

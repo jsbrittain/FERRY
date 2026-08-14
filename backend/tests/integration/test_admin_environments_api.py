@@ -12,7 +12,7 @@ def seeded_environments(db_session):
             runtime="python-3.13",
             description="NumPy, SciPy, Pandas",
             status="active",
-            image_reference="epibridge/python-3.13-scientific:latest",
+            image_reference="ferry/python-3.13-scientific:latest",
         ),
         ExecutionEnvironment(
             identifier="r-4.5-tidyverse",
@@ -20,7 +20,7 @@ def seeded_environments(db_session):
             runtime="r-4.5",
             description="tidyverse, dplyr, ggplot2",
             status="active",
-            image_reference="epibridge/r-4.5-tidyverse:latest",
+            image_reference="ferry/r-4.5-tidyverse:latest",
         ),
     ]
     for e in environments:

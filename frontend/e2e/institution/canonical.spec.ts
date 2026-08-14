@@ -4,10 +4,10 @@ import * as fs from "fs";
 import { createZip } from "../helpers/zip";
 import { login } from "../helpers/auth";
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@epibridge.local";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@ferry.local";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin";
 const MAINTAINER_EMAIL =
-  process.env.MAINTAINER_EMAIL || "maintainer@epibridge.local";
+  process.env.MAINTAINER_EMAIL || "maintainer@ferry.local";
 const MAINTAINER_PASSWORD = process.env.MAINTAINER_PASSWORD || "maintainer";
 
 const ANALYSIS_CODE = `\
@@ -33,7 +33,7 @@ test("Canonical Workflow", async ({ page }) => {
   await expect(page.getByTestId("header-user-name")).toHaveText("Administrator");
 
   await page.request.post("/api/admin/terms/platform", {
-    data: { version: TS.toString(), title: "EpiBridge Platform Terms", content: "## Terms\n\nBy using this platform you agree." },
+    data: { version: TS.toString(), title: "FERRY Platform Terms", content: "## Terms\n\nBy using this platform you agree." },
   });
   await page.request.post("/api/admin/users", {
     data: { email: researcherEmail, display_name: "Canonical Researcher", password: "testpass123", roles: ["researcher"] },

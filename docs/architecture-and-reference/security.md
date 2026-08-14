@@ -2,7 +2,7 @@
 
 ## Trust Boundary
 
-Each institution deploys EpiBridge inside a restricted Linux virtual machine.
+Each institution deploys FERRY inside a restricted Linux virtual machine.
 
 The VM contains:
 

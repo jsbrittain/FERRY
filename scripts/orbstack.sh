@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-MACHINE="epibridge"
+MACHINE="ferry"
 CLOUD_INIT="vm/cloud-init.yaml"
 
 # Validate that the required runtime is available before any operation.
@@ -15,10 +15,10 @@ case "${1:-help}" in
   create)
     shift
     if orbctl info "$MACHINE" >/dev/null 2>&1; then
-        echo "ERROR: An EpiBridge VM named \"$MACHINE\" already exists." >&2
+        echo "ERROR: An FERRY VM named \"$MACHINE\" already exists." >&2
         echo "" >&2
         echo "make install provisions a new platform into a fresh execution" >&2
-        echo "environment.  If you intended to reinstall EpiBridge, first run:" >&2
+        echo "environment.  If you intended to reinstall FERRY, first run:" >&2
         echo "" >&2
         echo "    make uninstall" >&2
         echo "" >&2
@@ -27,7 +27,7 @@ case "${1:-help}" in
         echo "    make install" >&2
         exit 1
     else
-        echo "Launching EpiBridge VM \"$MACHINE\" (Ubuntu 24.04)..."
+        echo "Launching FERRY VM \"$MACHINE\" (Ubuntu 24.04)..."
         orbctl create --user-data "$CLOUD_INIT" ubuntu:24.04 "$MACHINE" "$@"
     fi
     echo "Waiting for cloud-init provisioning to complete..."
@@ -35,7 +35,7 @@ case "${1:-help}" in
     # Cloud-init may report status: error for transient issues
     # (e.g., network blips during package downloads) that do not
     # affect platform operation.  The readiness gate is whether
-    # the services EpiBridge depends on are actually available.
+    # the services FERRY depends on are actually available.
     # Use || rc=$? to capture the exit code without triggering
     # set -e, which would otherwise abort before we can inspect it.
     rc=0
@@ -51,9 +51,9 @@ case "${1:-help}" in
     ;;
   mount)
     # OrbStack auto-shares the host filesystem.
-    # Replace /opt/epibridge (empty dir from cloud-init) with a symlink to the repo.
-    ssh root@"$MACHINE"@orb "rm -rf /opt/epibridge && ln -sfn $(pwd) /opt/epibridge"
-    echo "Mounted $(pwd) at /opt/epibridge"
+    # Replace /opt/ferry (empty dir from cloud-init) with a symlink to the repo.
+    ssh root@"$MACHINE"@orb "rm -rf /opt/ferry && ln -sfn $(pwd) /opt/ferry"
+    echo "Mounted $(pwd) at /opt/ferry"
     ;;
   start)
     shift
@@ -84,7 +84,7 @@ case "${1:-help}" in
     echo "  create           Create the installation VM"
     echo "  delete           Delete the installation VM
   start            Verify the installation VM is running"
-    echo "  mount            Symlink repo into /opt/epibridge"
+    echo "  mount            Symlink repo into /opt/ferry"
     echo "  ssh [cmd]        Run command in the VM (or start a shell)"
     echo "  ip               Show VM IP address"
     ;;

@@ -1,13 +1,13 @@
 # Installation
 
-How to install EpiBridge for evaluation or production use.
+How to install FERRY for evaluation or production use.
 
 ## Prerequisites
 
 | Requirement | Version | Purpose |
 |-------------|---------|---------|
 | Git | any | Clone the repository |
-| Multipass | latest | Linux VM for EpiBridge services (recommended on macOS) |
+| Multipass | latest | Linux VM for FERRY services (recommended on macOS) |
 | OrbStack | latest | Alternative VM provider (macOS only) |
 | Make | any | Convenience wrapper for installation commands |
 | mkcert | latest | Trusted local HTTPS certificates |
@@ -22,7 +22,7 @@ No other host dependencies are required. Python, Node.js, PostgreSQL, and Redis 
 
 ## Installation targets
 
-EpiBridge supports two installation modes:
+FERRY supports two installation modes:
 
 ### Multipass VM (recommended on macOS)
 
@@ -64,7 +64,7 @@ The administrator account is created during installation with these defaults:
 
 | Field | Value |
 |-------|-------|
-| Email | `admin@epibridge.local` |
+| Email | `admin@ferry.local` |
 | Password | Stored in `.env` as `ADMIN_PASSWORD` |
 
 The password is generated automatically and saved to `.env`. It is never displayed in the terminal. To retrieve it:
@@ -102,17 +102,17 @@ To regenerate all secrets, delete `.env` and run `make install` again.
 
 ## Public URL
 
-`PUBLIC_URL` is the canonical external URL for the EpiBridge installation. It is used in email notification links and browser-facing redirects.
+`PUBLIC_URL` is the canonical external URL for the FERRY installation. It is used in email notification links and browser-facing redirects.
 
 For local evaluation, the default (`https://localhost`) works. For production deployments, set this to the institution's domain:
 
 ```
-PUBLIC_URL=https://epibridge.institution.edu
+PUBLIC_URL=https://ferry.institution.edu
 ```
 
 ## Local HTTPS
 
-EpiBridge requires HTTPS for secure cookie-based sessions. During local evaluation, trusted HTTPS certificates are generated automatically using mkcert.
+FERRY requires HTTPS for secure cookie-based sessions. During local evaluation, trusted HTTPS certificates are generated automatically using mkcert.
 
 To regenerate certificates:
 
@@ -124,7 +124,7 @@ This is also useful if certificates expire or if you need to trust them on a new
 
 ## Uninstalling
 
-To remove the local EpiBridge installation:
+To remove the local FERRY installation:
 
 ```bash
 make uninstall

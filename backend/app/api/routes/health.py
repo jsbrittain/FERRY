@@ -6,7 +6,7 @@ from sqlalchemy import text
 from app.core.config import settings
 from app.db.session import SessionLocal
 
-logger = logging.getLogger("epibridge")
+logger = logging.getLogger("ferry")
 
 router = APIRouter()
 

@@ -2,7 +2,7 @@ from app.auth.local import hash_password
 from app.core.config import settings
 from app.models.user import User, UserRole
 
-LOGIN_TEST_EMAIL = "logintest@epibridge.local"
+LOGIN_TEST_EMAIL = "logintest@ferry.local"
 LOGIN_TEST_PASSWORD = "login-test-pw"
 
 

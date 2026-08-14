@@ -22,7 +22,7 @@ A minimal example analysis that reads the demonstration surveillance dataset and
 Build the runtime image locally (defined in `execution-environments/python-3.14/`):
 
 ```sh
-docker build -t epibridge/python-3.14:latest execution-environments/python-3.14/
+docker build -t ferry/python-3.14:latest execution-environments/python-3.14/
 ```
 
 Run the analysis:
@@ -31,6 +31,6 @@ Run the analysis:
 docker run --rm -it \
   -v $(pwd):/analysis \
   -v $(pwd)/../../resources/demo-surveillance/data:/data/demo-surveillance:ro \
-  epibridge/python-3.14:latest \
+  ferry/python-3.14:latest \
   python /analysis/run.py
 ```

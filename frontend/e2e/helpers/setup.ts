@@ -2,13 +2,13 @@ import { request, type APIRequestContext } from "@playwright/test";
 import { createZip } from "./zip";
 
 const BASE = process.env.PLAYWRIGHT_BASE_URL || "https://localhost";
-export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@epibridge.local";
+export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@ferry.local";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin";
 export const MAINTAINER_EMAIL =
-  process.env.MAINTAINER_EMAIL || "maintainer@epibridge.local";
+  process.env.MAINTAINER_EMAIL || "maintainer@ferry.local";
 const MAINTAINER_PASSWORD = process.env.MAINTAINER_PASSWORD || "maintainer";
 export const RESEARCHER_EMAIL =
-  process.env.RESEARCHER_EMAIL || "researcher@epibridge.local";
+  process.env.RESEARCHER_EMAIL || "researcher@ferry.local";
 const RESEARCHER_PASSWORD = process.env.RESEARCHER_PASSWORD || "researcher";
 
 export const RESOURCE_IDENTIFIER = "demo-surveillance";
@@ -28,7 +28,7 @@ export async function ensureTermsPublished(): Promise<void> {
     .post("/api/admin/terms/platform", {
       data: {
         version: "1.0.0",
-        title: "EpiBridge Platform Terms",
+        title: "FERRY Platform Terms",
         content: "## Terms\n\nAccept to continue.",
       },
     })

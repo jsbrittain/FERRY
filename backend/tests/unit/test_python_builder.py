@@ -50,7 +50,7 @@ class TestPythonBuilder:
     ):
         mock_client = MagicMock()
         mock_image = MagicMock()
-        mock_image.tags = ["epibridge/builds/test:abc"]
+        mock_image.tags = ["ferry/builds/test:abc"]
         mock_client.images.build.return_value = (mock_image, [])
         mock_client.images.get.return_value = None
         mock_docker_from_env.return_value = mock_client
@@ -63,11 +63,11 @@ class TestPythonBuilder:
             result = self.builder.build(
                 bundle_path=bundle_path,
                 dockerfile=dockerfile,
-                base_image="epibridge/python-3.13:latest",
-                image_tag="epibridge/builds/test:abc",
+                base_image="ferry/python-3.13:latest",
+                image_tag="ferry/builds/test:abc",
             )
 
-        assert result.image_reference == "epibridge/builds/test:abc"
+        assert result.image_reference == "ferry/builds/test:abc"
         assert result.duration_seconds >= 0
         mock_client.images.build.assert_called_once()
 
@@ -88,8 +88,8 @@ class TestPythonBuilder:
             result = self.builder.build(
                 bundle_path=bundle_path,
                 dockerfile=dockerfile,
-                base_image="epibridge/python-3.13:latest",
-                image_tag="epibridge/builds/test:abc",
+                base_image="ferry/python-3.13:latest",
+                image_tag="ferry/builds/test:abc",
             )
 
         assert result.success is False
@@ -102,8 +102,8 @@ class TestPythonBuilder:
             result = self.builder.build(
                 bundle_path=bundle_path,
                 dockerfile=dockerfile,
-                base_image="epibridge/python-3.13:latest",
-                image_tag="epibridge/builds/test:abc",
+                base_image="ferry/python-3.13:latest",
+                image_tag="ferry/builds/test:abc",
             )
         assert result.success is False
         assert "requirements.txt" in result.build_log
@@ -117,8 +117,8 @@ class TestPythonBuilder:
                 self.builder.build(
                     bundle_path=bundle_path,
                     dockerfile=missing_dockerfile,
-                    base_image="epibridge/python-3.13:latest",
-                    image_tag="epibridge/builds/test:abc",
+                    base_image="ferry/python-3.13:latest",
+                    image_tag="ferry/builds/test:abc",
                 )
 
     @patch("app.builders.python.docker.from_env")
@@ -138,7 +138,7 @@ class TestPythonBuilder:
             self.builder.build(
                 bundle_path=bundle_path,
                 dockerfile=dockerfile,
-                base_image="epibridge/python-3.13:latest",
+                base_image="ferry/python-3.13:latest",
                 image_tag="test:tag",
             )
 
@@ -147,7 +147,7 @@ class TestPythonBuilder:
     def test_build_with_custom_dockerfile(self, mock_copy2, mock_docker_from_env):
         mock_client = MagicMock()
         mock_image = MagicMock()
-        mock_image.tags = ["epibridge/builds/test:custom"]
+        mock_image.tags = ["ferry/builds/test:custom"]
         mock_client.images.build.return_value = (mock_image, [])
         mock_client.images.get.return_value = None
         mock_docker_from_env.return_value = mock_client
@@ -161,10 +161,10 @@ class TestPythonBuilder:
             result = self.builder.build(
                 bundle_path=bundle_path,
                 dockerfile=custom_df,
-                base_image="epibridge/python-3.13:latest",
-                image_tag="epibridge/builds/test:custom",
+                base_image="ferry/python-3.13:latest",
+                image_tag="ferry/builds/test:custom",
             )
 
-        assert result.image_reference == "epibridge/builds/test:custom"
+        assert result.image_reference == "ferry/builds/test:custom"
         assert result.success
         mock_client.images.build.assert_called_once()

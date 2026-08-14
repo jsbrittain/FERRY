@@ -1,6 +1,6 @@
 # Local Development
 
-Setting up a local development environment for contributing to EpiBridge.
+Setting up a local development environment for contributing to FERRY.
 
 ## Development workflow
 

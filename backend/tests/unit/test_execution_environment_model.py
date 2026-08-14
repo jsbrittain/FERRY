@@ -9,14 +9,14 @@ class TestExecutionEnvironmentModel:
             runtime="python-3.13",
             description="NumPy, SciPy, Pandas",
             status="active",
-            image_reference="epibridge/python-3.13-scientific:latest",
+            image_reference="ferry/python-3.13-scientific:latest",
         )
         assert env.identifier == "python-3.13-scientific"
         assert env.name == "Python 3.13 Scientific"
         assert env.runtime == "python-3.13"
         assert env.description == "NumPy, SciPy, Pandas"
         assert env.status == "active"
-        assert env.image_reference == "epibridge/python-3.13-scientific:latest"
+        assert env.image_reference == "ferry/python-3.13-scientific:latest"
 
     def test_default_status(self):
         env = ExecutionEnvironment(

@@ -13,7 +13,7 @@ from app.services.audit_service import create_audit_event
 @pytest.fixture
 def user(db_session):
     user = User(
-        email="audit-test@epibridge.local",
+        email="audit-test@ferry.local",
         display_name="Audit Test User",
         role=UserRole.RESEARCHER,
         password_hash="",
@@ -95,7 +95,7 @@ class TestAuditEventPersistence:
             actor_id=user.id,
             resource_type="user",
             resource_id=uuid.uuid4(),
-            metadata={"user_email": "new@epibridge.local"},
+            metadata={"user_email": "new@ferry.local"},
         )
         db_session.commit()
 

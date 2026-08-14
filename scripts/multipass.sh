@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# multipass.sh — Multipass VM helper for EpiBridge
+# multipass.sh — Multipass VM helper for FERRY
 #
 # Provides VM lifecycle operations through the same interface as
 # orbstack.sh, enabling the platform.sh abstraction layer to manage
 # a Multipass-backed execution environment.
 
-MACHINE="epibridge"
+MACHINE="ferry"
 CLOUD_INIT="vm/cloud-init.yaml"
 
 # VM resource defaults — overridable via environment variables.
@@ -32,10 +32,10 @@ case "${1:-help}" in
   create)
     shift
     if multipass info "$MACHINE" >/dev/null 2>&1; then
-      echo "ERROR: An EpiBridge VM named \"$MACHINE\" already exists." >&2
+      echo "ERROR: An FERRY VM named \"$MACHINE\" already exists." >&2
       echo "" >&2
       echo "make install provisions a new platform into a fresh execution" >&2
-      echo "environment.  If you intended to reinstall EpiBridge, first run:" >&2
+      echo "environment.  If you intended to reinstall FERRY, first run:" >&2
       echo "" >&2
       echo "    make uninstall" >&2
       echo "" >&2
@@ -44,7 +44,7 @@ case "${1:-help}" in
       echo "    make install" >&2
       exit 1
     else
-      echo "Launching EpiBridge VM \"$MACHINE\" (Ubuntu 24.04, ${MULTIPASS_CPUS} CPU, ${MULTIPASS_MEMORY} RAM, ${MULTIPASS_DISK} disk)..."
+      echo "Launching FERRY VM \"$MACHINE\" (Ubuntu 24.04, ${MULTIPASS_CPUS} CPU, ${MULTIPASS_MEMORY} RAM, ${MULTIPASS_DISK} disk)..."
       if ! multipass launch --cpus "$MULTIPASS_CPUS" --memory "$MULTIPASS_MEMORY" --disk "$MULTIPASS_DISK" --cloud-init "$CLOUD_INIT" 24.04 --name "$MACHINE" "$@"; then
         # Launch may time out while cloud-init provisions the VM.
         # Check whether the VM exists before deciding how to handle this.
@@ -60,7 +60,7 @@ case "${1:-help}" in
     # Cloud-init may report status: error for transient issues
     # (e.g., network blips during package downloads) that do not
     # affect platform operation.  The readiness gate is whether
-    # the services EpiBridge depends on are actually available.
+    # the services FERRY depends on are actually available.
     # Use || rc=$? to capture the exit code without triggering
     # set -e, which would otherwise abort before we can inspect it.
     rc=0
@@ -73,7 +73,7 @@ case "${1:-help}" in
     # Host-side redirection of multipass exec can hang when the
     # command produces output.  Redirect stdout/stderr inside the
     # guest to avoid this behaviour.
-    multipass exec "$MACHINE" -- sh -c 'sudo -u epibridge docker info >/dev/null 2>&1'
+    multipass exec "$MACHINE" -- sh -c 'sudo -u ferry docker info >/dev/null 2>&1'
     echo "Docker Engine is running."
     echo "VM $MACHINE ready."
     ;;
@@ -82,9 +82,9 @@ case "${1:-help}" in
     # for development. Unlike the default SSHFS mount on macOS, native
     # mounts support full file read/write access.
     # Requires the VM to be stopped, then started after mounting.
-    multipass umount "$MACHINE:/opt/epibridge" 2>/dev/null || true
+    multipass umount "$MACHINE:/opt/ferry" 2>/dev/null || true
     multipass stop "$MACHINE" 2>/dev/null || true
-    multipass mount -t native "$(pwd)" "$MACHINE:/opt/epibridge"
+    multipass mount -t native "$(pwd)" "$MACHINE:/opt/ferry"
     multipass start "$MACHINE"
     echo "Waiting for cloud-init to complete after restart..."
     # Cloud-init may report warnings after a restart — the readiness
@@ -101,9 +101,9 @@ case "${1:-help}" in
     # Host-side redirection of multipass exec can hang when the
     # command produces output.  Redirect stdout/stderr inside the
     # guest to avoid this behaviour.
-    multipass exec "$MACHINE" -- sh -c 'sudo -u epibridge docker info >/dev/null 2>&1'
+    multipass exec "$MACHINE" -- sh -c 'sudo -u ferry docker info >/dev/null 2>&1'
     echo "Docker Engine is running."
-    echo "Mounted $(pwd) at /opt/epibridge (native 9p)"
+    echo "Mounted $(pwd) at /opt/ferry (native 9p)"
     ;;
   start)
     shift
@@ -117,17 +117,17 @@ case "${1:-help}" in
     fi
     echo "Cloud-init finished."
     echo "Verifying Docker is available..."
-    multipass exec "$MACHINE" -- sh -c 'sudo -u epibridge docker info >/dev/null 2>&1'
+    multipass exec "$MACHINE" -- sh -c 'sudo -u ferry docker info >/dev/null 2>&1'
     echo "Docker Engine is running."
     echo "VM $MACHINE ready."
     ;;
 
   exec)
     shift
-    multipass exec "$MACHINE" -- sudo -u epibridge "$@"
+    multipass exec "$MACHINE" -- sudo -u ferry "$@"
     ;;
   shell)
-    exec multipass exec "$MACHINE" -- sudo -u epibridge -s
+    exec multipass exec "$MACHINE" -- sudo -u ferry -s
     ;;
   ip)
     multipass info "$MACHINE" --format json | python3 -c "import json,sys; print(json.load(sys.stdin)['info']['$MACHINE']['ipv4'][0])"
@@ -143,9 +143,9 @@ case "${1:-help}" in
     echo "  create           Create the installation VM"
     echo "  delete           Delete the installation VM
   start            Start the installation VM"
-    echo "  mount            Mount repo into /opt/epibridge (native 9p)"
-    echo "  exec <cmd>       Run command inside the VM (as epibridge user)"
-    echo "  shell            Interactive shell inside the VM (as epibridge user)"
+    echo "  mount            Mount repo into /opt/ferry (native 9p)"
+    echo "  exec <cmd>       Run command inside the VM (as ferry user)"
+    echo "  shell            Interactive shell inside the VM (as ferry user)"
     echo "  ip               Show VM IP address"
     ;;
 esac

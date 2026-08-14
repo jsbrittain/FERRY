@@ -47,7 +47,7 @@ export default function LoginPage() {
     >
       <div className="card" style={{ width: 360 }}>
         <h1 style={{ fontSize: "1.5rem", fontWeight: 600, marginBottom: "var(--spacing-lg)" }}>
-          EpiBridge
+          FERRY
         </h1>
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: "var(--spacing-md)" }}>

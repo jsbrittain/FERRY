@@ -10,15 +10,15 @@ def test_settings_loads_with_minimal_env():
         _env_file=None,
         postgres_password="test-pw",
         postgres_host="localhost",
-        postgres_db="epibridge",
+        postgres_db="ferry",
         redis_password="test-redis",
         secret_key=LONG_KEY,
     )
     assert s.postgres_host == "localhost"
     assert s.postgres_port == 5432
-    assert s.postgres_db == "epibridge"
+    assert s.postgres_db == "ferry"
     assert str(s.public_url) == "https://localhost"
-    assert s.admin_email == "admin@epibridge.local"
+    assert s.admin_email == "admin@ferry.local"
 
 
 def test_settings_database_url_property():

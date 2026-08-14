@@ -117,8 +117,8 @@ def _try_parse_role_enum(name: str) -> UserRole | None:
 
 
 _SYSTEM_USERS: list[tuple[uuid.UUID, str, str]] = [
-    (SYSTEM_USER_ID, "system@epibridge.internal", "System"),
-    (WORKER_USER_ID, "execution_worker@epibridge.internal", "Execution Worker"),
+    (SYSTEM_USER_ID, "system@ferry.internal", "System"),
+    (WORKER_USER_ID, "execution_worker@ferry.internal", "Execution Worker"),
 ]
 
 

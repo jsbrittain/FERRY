@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.models.platform_setting import PlatformSetting, SettingKey
 
-logger = logging.getLogger("epibridge.platform_settings")
+logger = logging.getLogger("ferry.platform_settings")
 
 
 def get_setting(db: Session, key: SettingKey) -> str | None:

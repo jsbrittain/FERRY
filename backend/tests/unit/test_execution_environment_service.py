@@ -18,7 +18,7 @@ VALID_ENTRY = {
     "runtime": "python-3.13",
     "description": "NumPy, SciPy, Pandas",
     "status": "active",
-    "image_reference": "epibridge/python-3.13-scientific:latest",
+    "image_reference": "ferry/python-3.13-scientific:latest",
 }
 
 
@@ -56,7 +56,7 @@ def test_upsert_creates_new():
     assert result.runtime == "python-3.13"
     assert result.description == "NumPy, SciPy, Pandas"
     assert result.status == "active"
-    assert result.image_reference == "epibridge/python-3.13-scientific:latest"
+    assert result.image_reference == "ferry/python-3.13-scientific:latest"
     assert result.definition_path is None
     db.add.assert_called_once_with(result)
 

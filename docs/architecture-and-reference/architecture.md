@@ -1,14 +1,14 @@
-# EpiBridge — Architecture Summary
+# FERRY — Architecture Summary
 
 ## Vision
 
-EpiBridge is a secure remote analysis platform for epidemiology and other sensitive research data.
+FERRY is a secure remote analysis platform for epidemiology and other sensitive research data.
 
 The guiding principle is:
 
 > Move the computation to the data, not the data to the computation.
 
-Rather than giving researchers direct access to sensitive datasets, EpiBridge allows them to develop analyses locally using schema documentation and synthetic data, submit analysis bundles to the data owner, execute those jobs within a secure institutional environment, and receive approved outputs after governance review.
+Rather than giving researchers direct access to sensitive datasets, FERRY allows them to develop analyses locally using schema documentation and synthetic data, submit analysis bundles to the data owner, execute those jobs within a secure institutional environment, and receive approved outputs after governance review.
 
 Sensitive data never leaves the institution.
 
@@ -16,7 +16,7 @@ Sensitive data never leaves the institution.
 
 ## Trust Boundaries
 
-EpiBridge defines three distinct trust boundaries, each with different privileges and responsibilities.
+FERRY defines three distinct trust boundaries, each with different privileges and responsibilities.
 
 ```
 Host
@@ -26,18 +26,18 @@ Host
 
 ### Host
 
-The host machine owns the physical or networked storage containing sensitive institutional data. EpiBridge never knows host paths and never accesses host storage directly. The host is managed by institutional IT and is outside EpiBridge's operational scope.
+The host machine owns the physical or networked storage containing sensitive institutional data. FERRY never knows host paths and never accesses host storage directly. The host is managed by institutional IT and is outside FERRY's operational scope.
 
 ### Trusted Runtime (VM)
 
-The deployment runs inside a restricted Linux virtual machine. This is the EpiBridge platform boundary. The VM contains:
+The deployment runs inside a restricted Linux virtual machine. This is the FERRY platform boundary. The VM contains:
 
-- All EpiBridge services (frontend, backend, database, worker)
+- All FERRY services (frontend, backend, database, worker)
 - Docker Engine
 - The Resource Registry (database index of registered data resources and execution environments)
 - Institutional data resources exposed at a well-known location: `/read-only-data`
 
-How resources arrive at `/read-only-data` (bind mount, NFS, cloud storage) is the deployment's responsibility — never EpiBridge's.
+How resources arrive at `/read-only-data` (bind mount, NFS, cloud storage) is the deployment's responsibility — never FERRY's.
 
 ### Analysis Container
 
@@ -79,7 +79,7 @@ The Executor enforces this by mounting only the authorised subset. A compromised
 | Boundary | Contents | Privilege |
 |----------|----------|-----------|
 | Host | Physical storage, institutional IT | Most privileged |
-| Trusted Runtime (VM) | EpiBridge services, `/read-only-data`, Registry | Medium |
+| Trusted Runtime (VM) | FERRY services, `/read-only-data`, Registry | Medium |
 | Analysis Container | `/work`, `/data/{alias}`, `/output` | Least privileged |
 
 This three-layer design ensures that even a fully compromised analysis container cannot access unauthorised data or infrastructure configuration.
@@ -104,13 +104,13 @@ This three-layer design ensures that even a fully compromised analysis container
 
 ## Deployment Model
 
-Each institution runs its own EpiBridge instance inside a restricted Linux virtual machine.
+Each institution runs its own FERRY instance inside a restricted Linux virtual machine.
 
 ```
 Institution
 └── Virtual Machine
         │
-        ├── EpiBridge Platform
+        ├── FERRY Platform
         ├── Local Sensitive Data
         └── Analysis Containers
 ```
@@ -140,7 +140,7 @@ Internet
 Reverse Proxy
     │
 ────────────────────────────
-EpiBridge
+FERRY
 ────────────────────────────
 Frontend (Next.js)
 ↓
@@ -278,7 +278,7 @@ ProjectMembership answers one question only: does this User participate in this 
 
 ### Institutional Personas
 
-EpiBridge defines four institutional personas, each with a distinct scope of responsibility. The persona is derived from the user's role and is surfaced in the UI (header, homepage quick actions, Projects list filtering).
+FERRY defines four institutional personas, each with a distinct scope of responsibility. The persona is derived from the user's role and is surfaced in the UI (header, homepage quick actions, Projects list filtering).
 
 | Persona | Role | Responsibilities |
 |---------|------|------------------|
@@ -343,13 +343,13 @@ This design means:
 
 ## Institutional Infrastructure vs. Researcher Artefacts
 
-EpiBridge makes a clear distinction between two categories of entities.
+FERRY makes a clear distinction between two categories of entities.
 
 ### Institutional Infrastructure — Publications (curated by the institution)
 
 The institution publishes authoritative guidance and infrastructure through **repository-backed publications**:
 
-- **Data Resources** — registered institutional data assets. The institution owns and manages the underlying data; EpiBridge provides the catalogue and access control. Each publication includes schemas, documentation, and representative datasets.
+- **Data Resources** — registered institutional data assets. The institution owns and manages the underlying data; FERRY provides the catalogue and access control. Each publication includes schemas, documentation, and representative datasets.
 - **Execution Environments** — approved runtimes in which analyses execute. The institution curates the available environments and their contents, publishing base images, Dockerfiles, and local development guidance.
 - **Example Analyses** — demonstration bundles showing how to structure analyses against specific resources.
 - **Bundle Templates** — reusable bundle structures that researchers can download and adapt.
@@ -475,9 +475,9 @@ For a task-oriented walkthrough of the researcher lifecycle, see the [Quick Star
 
 ## Data Resources
 
-EpiBridge does not own, store, or manage scientific data.
+FERRY does not own, store, or manage scientific data.
 
-A **Data Resource** represents an existing institutional data asset that has been registered for analysis. The institution owns and manages the underlying data; EpiBridge provides a catalogue of available resources, access control, and secure execution.
+A **Data Resource** represents an existing institutional data asset that has been registered for analysis. The institution owns and manages the underlying data; FERRY provides a catalogue of available resources, access control, and secure execution.
 
 For the runtime mount contract (where resources appear inside analysis containers), see the [Data Resources administrator guide](../administrator-guide/data-resources.md#runtime-access-contract).
 
@@ -516,7 +516,7 @@ The registration service reconciles resources using `identifier` — it is the c
 
 Data Resources are registered from YAML manifests. The manifest is used to
 register the resource; after registration, operational management occurs within
-EpiBridge through the admin API and UI.
+FERRY through the admin API and UI.
 
 ```
 Load all manifests
@@ -1077,7 +1077,7 @@ Execution mechanics must never influence governance independence.
 
 ### The Provenance Model
 
-Three distinct provenance concepts exist within EpiBridge:
+Three distinct provenance concepts exist within FERRY:
 
 | Concept | Question Answered | Field | Set When |
 |---------|-------------------|-------|----------|
@@ -1124,7 +1124,7 @@ The separation preserves:
 
 ### Lessons Learned
 
-One of the recurring design lessons throughout EpiBridge has been:
+One of the recurring design lessons throughout FERRY has been:
 
 > When two concepts happen to coincide in the current implementation, do not model them as the same thing unless they are genuinely the same domain concept.
 
@@ -1137,7 +1137,7 @@ Output files are written to the execution container's local `/output` directory 
 1. Retrieves them via the Docker API (`get_archive`) — a **pull** operation from inside the container (trust boundary preserved)
 2. Persists them to a shared filesystem volume at `/outputs/{execution_request_id}/{filename}`
 3. Creates an `OutputSet` record and registers each file as an `Output` record linked to that set
-4. Release Packages are written to `/var/lib/epibridge/releases/` during the Release transition
+4. Release Packages are written to `/var/lib/ferry/releases/` during the Release transition
 
 ---
 
@@ -1569,14 +1569,14 @@ For operational guidance on configuration, logging, and health checks, see [Conf
 
 ## Architectural Principles
 
-1. EpiBridge does not own scientific data.
+1. FERRY does not own scientific data.
 2. Data Resources represent institutional assets, registered from manifests.
 3. Projects represent permission to analyse one or more institutional assets.
 4. Providers validate endpoints and prepare execution views.
-5. The deployment owns physical storage. EpiBridge owns the catalogue and execution model.
+5. The deployment owns physical storage. FERRY owns the catalogue and execution model.
 6. The runtime contract is `/read-only-data`, `/work`, `/data`, and `/output`.
 7. Analysis containers receive only authorised resources.
-8. Analyses use standard language interfaces rather than an EpiBridge SDK.
+8. Analyses use standard language interfaces rather than an FERRY SDK.
 9. Analysis Bundles are researcher artefacts, created within Projects and owned by their authors.
 10. Authorisation is capability-based, not role-based.
 11. Project Membership is scope only — no roles or capabilities on membership.

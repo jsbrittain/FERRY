@@ -1,6 +1,6 @@
 # Execution Environments
 
-Managing execution environments in EpiBridge.
+Managing execution environments in FERRY.
 
 ## What is an Execution Environment?
 
@@ -13,13 +13,13 @@ An execution environment is more than a language runtime. It represents an insti
 ## Adding a new execution environment
 
 ```
-1. Define the runtime     →  Dockerfile and package list (outside EpiBridge)
-2. Build and publish      →  docker build + docker push (outside EpiBridge)
-3. Register with EpiBridge →  place manifest — auto-discovered on next startup
+1. Define the runtime     →  Dockerfile and package list (outside FERRY)
+2. Build and publish      →  docker build + docker push (outside FERRY)
+3. Register with FERRY →  place manifest — auto-discovered on next startup
 4. Add acceptance test    →  optional, under frontend/e2e/
 ```
 
-### Step 1 — Define the runtime (outside EpiBridge)
+### Step 1 — Define the runtime (outside FERRY)
 
 Create a Dockerfile that defines the base image, language runtime, and
 pre-installed packages. The builder template (Python or Conda) will add the
@@ -34,19 +34,19 @@ cp execution-environments/python-3.14/Dockerfile execution-environments/my-env/
 # Edit manifest.yaml and Dockerfile to match the new runtime
 ```
 
-### Step 2 — Build and publish the base image (outside EpiBridge)
+### Step 2 — Build and publish the base image (outside FERRY)
 
 Build the image and push it to a registry accessible to the platform:
 
 ```bash
-docker build -t registry.example.com/epibridge/my-env:latest .
-docker push registry.example.com/epibridge/my-env:latest
+docker build -t registry.example.com/ferry/my-env:latest .
+docker push registry.example.com/ferry/my-env:latest
 ```
 
 The `image_reference` in the manifest must match the published image tag.
 The platform does not build or publish base images — it only references them.
 
-### Step 3 — Register with EpiBridge
+### Step 3 — Register with FERRY
 
 On startup, the platform automatically scans `execution-environments/` for
 manifests and updates the registered definitions. No explicit registration

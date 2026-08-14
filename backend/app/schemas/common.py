@@ -20,5 +20,5 @@ ValidEmail = Annotated[str, AfterValidator(_validate_email)]
 """A syntactically valid email address.
 
 Syntax validation only — no DNS, MX, or reserved-TLD checks.
-Accepts non-public domains (e.g. ``admin@epibridge.local``).
+Accepts non-public domains (e.g. ``admin@ferry.local``).
 """

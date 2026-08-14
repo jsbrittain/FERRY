@@ -1,6 +1,6 @@
 ## Getting Started
 
-EpiBridge allows you to analyse sensitive epidemiological datasets without the data ever leaving the host institution.
+FERRY allows you to analyse sensitive epidemiological datasets without the data ever leaving the host institution.
 
 ### How It Works
 

@@ -1,4 +1,4 @@
-name: epibridge
+name: ferry
 
 services:
 
@@ -8,11 +8,11 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-epibridge}
-      POSTGRES_USER: ${POSTGRES_USER:-epibridge}
+      POSTGRES_DB: ${POSTGRES_DB:-ferry}
+      POSTGRES_USER: ${POSTGRES_USER:-ferry}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-epibridge}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ferry}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -94,12 +94,12 @@ services:
       EXAMPLE_ANALYSIS_DIR: /examples/analyses
       TEMPLATE_DIR: /examples/templates
       OUTPUT_DIR: /outputs
-      BUNDLE_STORE_DIR: /var/lib/epibridge/bundles
+      BUNDLE_STORE_DIR: /var/lib/ferry/bundles
     volumes:
-      - /var/lib/epibridge/outputs:/outputs:ro
-      - /var/lib/epibridge/bundles:/var/lib/epibridge/bundles:rw
-      - /var/lib/epibridge/releases:/var/lib/epibridge/releases
-      - /var/log/epibridge:/var/log/epibridge
+      - /var/lib/ferry/outputs:/outputs:ro
+      - /var/lib/ferry/bundles:/var/lib/ferry/bundles:rw
+      - /var/lib/ferry/releases:/var/lib/ferry/releases
+      - /var/log/ferry:/var/log/ferry
       - ./resources:/read-only-data:ro
       # Development manifest directories for lifespan auto-registration.
       # Production deployments should configure RESOURCE_MANIFEST_DIR
@@ -140,24 +140,24 @@ services:
       # The worker runs in a container, so provider mount sources
       # like /read-only-data/* are not visible to Docker Engine
       # on the host. HOST_DATA_ROOT provides the host-side equivalent.
-      HOST_DATA_ROOT: ${HOST_DATA_ROOT:-/opt/epibridge/resources}
+      HOST_DATA_ROOT: ${HOST_DATA_ROOT:-/opt/ferry/resources}
       # Persistent output store — writes imported execution artefacts
       # to the same volume the backend reads from.
       OUTPUT_DIR: /outputs
-      ANALYSIS_BUNDLE_ROOT: /var/lib/epibridge/bundles
+      ANALYSIS_BUNDLE_ROOT: /var/lib/ferry/bundles
       # Resource manifest directory — needed for representative dataset
       # resolution during validation runs.
       RESOURCE_MANIFEST_DIR: /resources
       # Host-side equivalent of RESOURCE_MANIFEST_DIR for Docker-outside-of-Docker
       # bind mounts during validation execution.
-      HOST_RESOURCE_MANIFEST_DIR: ${HOST_RESOURCE_MANIFEST_DIR:-/opt/epibridge/resources}
+      HOST_RESOURCE_MANIFEST_DIR: ${HOST_RESOURCE_MANIFEST_DIR:-/opt/ferry/resources}
     volumes:
       # Docker socket enables DockerExecutor — the only component
       # that communicates with Docker Engine to orchestrate analysis containers.
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /var/lib/epibridge/outputs:/outputs
-      - /var/lib/epibridge/bundles:/var/lib/epibridge/bundles:ro
-      - /var/log/epibridge:/var/log/epibridge
+      - /var/lib/ferry/outputs:/outputs
+      - /var/lib/ferry/bundles:/var/lib/ferry/bundles:ro
+      - /var/log/ferry:/var/log/ferry
       - ./resources:/read-only-data:ro
       # Resource publications — required for representative dataset mounts
       # during validation runs. Reuses the same manifest directory the

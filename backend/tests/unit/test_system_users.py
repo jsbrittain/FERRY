@@ -94,8 +94,8 @@ class TestSeedSystemUsers:
         users = [call[0][0] for call in db.add.call_args_list]
         emails = {u.email for u in users}
         assert len(emails) == 2  # unique
-        assert "system@epibridge.internal" in emails
-        assert "execution_worker@epibridge.internal" in emails
+        assert "system@ferry.internal" in emails
+        assert "execution_worker@ferry.internal" in emails
 
     def test_system_user_display_name(self):
         db = MagicMock()

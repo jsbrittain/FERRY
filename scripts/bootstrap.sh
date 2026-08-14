@@ -15,7 +15,7 @@ set -euo pipefail
 #   - Current directory is the repository root.
 #   - Docker and Docker Compose are available.
 #   - Infrastructure provisioning has completed — storage directories
-#     (/var/lib/epibridge/...) exist with correct ownership.
+#     (/var/lib/ferry/...) exist with correct ownership.
 
 if [ ! -f .env ]; then
     echo "ERROR: Configuration has not been initialised." >&2
@@ -72,8 +72,8 @@ export HOST_RESOURCE_MANIFEST_DIR="${HOST_RESOURCE_MANIFEST_DIR:-${REPO_ROOT}/re
 #     never stored in .env. The direction of dependency is:
 #       PUBLIC_URL (config) → PUBLIC_URL_HOST (derived) → Caddy
 ###############################################################################
-if [ -f .epibridge-context ]; then
-    ctx_url="$(sed -n 's/^EPIBRIDGE_REACHABLE_URL=//p' .epibridge-context 2>/dev/null || true)"
+if [ -f .ferry-context ]; then
+    ctx_url="$(sed -n 's/^FERRY_REACHABLE_URL=//p' .ferry-context 2>/dev/null || true)"
     if [ -n "$ctx_url" ]; then
         PUBLIC_URL="$ctx_url"
     fi
@@ -92,11 +92,11 @@ echo "Public URL: $PUBLIC_URL (hostname: $PUBLIC_URL_HOST)"
 # 5. Build Docker images
 ###############################################################################
 echo "Building application images..."
-docker compose --env-file ./.env --env-file ./.epibridge-compose.env build
+docker compose --env-file ./.env --env-file ./.ferry-compose.env build
 
 echo "Building analysis container images..."
 for dir in "$REPO_ROOT"/execution-environments/*/; do
-    tag="epibridge/$(basename "$dir"):latest"
+    tag="ferry/$(basename "$dir"):latest"
     echo "  Building $tag..."
     docker build -t "$tag" "$dir"
 done
@@ -104,7 +104,7 @@ done
 ###############################################################################
 # 6. Provision application storage
 ###############################################################################
-mkdir -p /var/lib/epibridge/bundles /var/lib/epibridge/outputs /var/lib/epibridge/releases
+mkdir -p /var/lib/ferry/bundles /var/lib/ferry/outputs /var/lib/ferry/releases
 
 ###############################################################################
 # 7. Generate TLS certificates if not present
@@ -126,13 +126,13 @@ fi
 # 8. Start services
 ###############################################################################
 echo "Starting services..."
-docker compose --env-file ./.env --env-file ./.epibridge-compose.env up -d
+docker compose --env-file ./.env --env-file ./.ferry-compose.env up -d
 
 ###############################################################################
 # 9. Wait for PostgreSQL
 ###############################################################################
 echo "Waiting for PostgreSQL..."
-until docker compose exec -T postgres pg_isready -U epibridge 2>/dev/null; do
+until docker compose exec -T postgres pg_isready -U ferry 2>/dev/null; do
   sleep 2
 done
 echo "PostgreSQL is ready."
@@ -160,4 +160,4 @@ echo "Running health checks..."
 ./scripts/healthcheck.sh
 
 echo ""
-echo "=== EpiBridge platform boot complete ==="
+echo "=== FERRY platform boot complete ==="

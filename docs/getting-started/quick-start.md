@@ -1,12 +1,12 @@
 # Quick Start
 
-A guided tutorial through the EpiBridge institutional workflow.
+A guided tutorial through the FERRY institutional workflow.
 
-This tutorial walks through the complete lifecycle of an analysis: from installation through to downloading results. It is designed for someone evaluating EpiBridge for the first time.
+This tutorial walks through the complete lifecycle of an analysis: from installation through to downloading results. It is designed for someone evaluating FERRY for the first time.
 
 ## Before you begin
 
-1. [Install EpiBridge](installation.md).
+1. [Install FERRY](installation.md).
 2. Verify the platform is running and accessible at `https://localhost`.
 3. Ensure at least one data resource is registered. The [Data Resources
    administrator guide](../administrator-guide/data-resources.md) covers the
@@ -150,7 +150,7 @@ The ZIP contains:
 
 ## Summary
 
-You have completed the full EpiBridge institutional workflow:
+You have completed the full FERRY institutional workflow:
 
 ```
 Prepare → Validate → Submit → Review → Execute → Review → Release → Download

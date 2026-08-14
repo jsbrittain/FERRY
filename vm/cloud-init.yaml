@@ -2,7 +2,7 @@
 ---
 # Refresh Ubuntu package metadata for the packages: section.
 # We intentionally do not perform a full package upgrade during
-# first boot. This VM is an EpiBridge appliance rather than a
+# first boot. This VM is an FERRY appliance rather than a
 # general-purpose server; unattended-upgrades provides ongoing
 # security updates after provisioning.
 package_update: true
@@ -17,7 +17,7 @@ packages:
   - unattended-upgrades
 
 users:
-  - name: epibridge
+  - name: ferry
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
     groups: docker
@@ -51,20 +51,20 @@ runcmd:
   - ufw --force enable
 
   # Create directories
-  - mkdir -p /opt/epibridge
-  - mkdir -p /var/lib/epibridge/data
-  - mkdir -p /var/lib/epibridge/bundles
-  - mkdir -p /var/lib/epibridge/outputs
-  - mkdir -p /var/lib/epibridge/releases
-  - mkdir -p /var/log/epibridge
+  - mkdir -p /opt/ferry
+  - mkdir -p /var/lib/ferry/data
+  - mkdir -p /var/lib/ferry/bundles
+  - mkdir -p /var/lib/ferry/outputs
+  - mkdir -p /var/lib/ferry/releases
+  - mkdir -p /var/log/ferry
 
   # Set ownership
-  - chown -R epibridge:epibridge /opt/epibridge
-  - chown -R epibridge:epibridge /var/lib/epibridge
-  - chown -R epibridge:epibridge /var/log/epibridge
+  - chown -R ferry:ferry /opt/ferry
+  - chown -R ferry:ferry /var/lib/ferry
+  - chown -R ferry:ferry /var/log/ferry
 
-  # Add epibridge to docker group
-  - usermod -aG docker epibridge
+  # Add ferry to docker group
+  - usermod -aG docker ferry
 
   # Final status
-  - echo "EpiBridge runtime ready — run install.sh as epibridge user"
+  - echo "FERRY runtime ready — run install.sh as ferry user"

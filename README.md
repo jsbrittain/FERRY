@@ -1,13 +1,13 @@
-# EpiBridge
-[![EpiBridge](https://github.com/kraemer-lab/EpiBridge/actions/workflows/EpiBridge.yml/badge.svg)](https://github.com/kraemer-lab/EpiBridge/actions/workflows/EpiBridge.yml) [![Documentation Status](https://readthedocs.org/projects/epibridge/badge/?version=latest)](https://epibridge.readthedocs.io/en/latest/?badge=latest)
+# FERRY
+[![FERRY](https://github.com/kraemer-lab/FERRY/actions/workflows/ferry.yml/badge.svg)](https://github.com/kraemer-lab/FERRY/actions/workflows/ferry.yml) [![Documentation Status](https://readthedocs.org/projects/ferry/badge/?version=latest)](https://ferry.readthedocs.io/en/latest/?badge=latest)
 
-Documentation: [ReadTheDocs](https://epibridge.readthedocs.io/en/latest)
+Documentation: [ReadTheDocs](https://ferry.readthedocs.io/en/latest)
 
 Secure remote analysis for sensitive epidemiological data.
 
-EpiBridge is an institutional platform for secure execution of approved analyses against institution-managed Data Resources, governed by a two-stage human approval workflow. Sensitive data never leaves the host institution.
+FERRY is an institutional platform for secure execution of approved analyses against institution-managed Data Resources, governed by a two-stage human approval workflow. Sensitive data never leaves the host institution.
 
-Researchers develop analyses locally using schema documentation and synthetic datasets, submit analysis bundles to EpiBridge, and receive approved outputs after execution within a secure environment.
+Researchers develop analyses locally using schema documentation and synthetic datasets, submit analysis bundles to FERRY, and receive approved outputs after execution within a secure environment.
 
 **Move the computation to the data, not the data to the computation.**
 
@@ -15,7 +15,7 @@ Researchers develop analyses locally using schema documentation and synthetic da
 
 ## Quick Start
 
-Install EpiBridge as an institutional platform.
+Install FERRY as an institutional platform.
 
 **Requirements**: Git, a container runtime, Make, [mkcert](https://github.com/FiloSottile/mkcert).
 
@@ -30,14 +30,14 @@ brew install mkcert
 ### Installation
 
 ```bash
-git clone https://github.com/kraemer-lab/EpiBridge.git
+git clone https://github.com/kraemer-lab/FERRY.git
 
-cd EpiBridge
+cd FERRY
 
 make install
 ```
 
-This creates your EpiBridge installation, generates trusted local HTTPS certificates, creates the administrator account, publishes institutional assets, and leaves the platform running.
+This creates your FERRY installation, generates trusted local HTTPS certificates, creates the administrator account, publishes institutional assets, and leaves the platform running.
 
 On the first installation, `.env` is created automatically with secure defaults. The administrator password is stored as `ADMIN_PASSWORD` in this file and is never displayed in the terminal. Subsequent installations reuse the existing configuration.
 
@@ -81,10 +81,10 @@ To regenerate all secrets, delete `.env` and run `make install` again.
 
 | Command | Purpose |
 |---------|---------|
-| `make install` | Install EpiBridge (default: OrbStack; use `TARGET=native` for Docker-native deployment) |
+| `make install` | Install FERRY (default: OrbStack; use `TARGET=native` for Docker-native deployment) |
 | `make seed-demo` | Seed evaluation personas and print welcome message |
 | `make dev` | Daily development workflow |
-| `make uninstall` | Remove the local EpiBridge installation |
+| `make uninstall` | Remove the local FERRY installation |
 
 `make uninstall` stops the platform services, removes the installation environment, and preserves the repository and `.env`. To fully reset, delete `.env` before reinstalling.
 
