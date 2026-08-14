@@ -26,7 +26,7 @@ DEMO_OUTPUT_FILENAME = "summary.csv"
 
 
 def seed_demo_workspace(db: Session) -> dict:
-    admin = db.query(User).filter(User.email == "admin@epibridge.local").first()
+    admin = db.query(User).filter(User.email == "admin@ferry.local").first()
     if admin is None:
         return {
             "status": "error",
@@ -56,7 +56,7 @@ def seed_demo_workspace(db: Session) -> dict:
 
     project = Project(
         name=DEMO_PROJECT_NAME,
-        description=("Demonstration analysis for EpiBridge canonical workflow."),
+        description=("Demonstration analysis for FERRY canonical workflow."),
         owner_id=admin.id,
     )
     db.add(project)

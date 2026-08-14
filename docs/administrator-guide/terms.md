@@ -4,9 +4,9 @@ Managing platform and dataset terms of service.
 
 ## Overview
 
-EpiBridge supports versioned institutional terms of service at two levels:
+FERRY supports versioned institutional terms of service at two levels:
 
-**Platform terms** govern access to the EpiBridge platform itself. All users must accept the current version before they can use the platform. If updated terms are published, users must accept the new version before continuing.
+**Platform terms** govern access to the FERRY platform itself. All users must accept the current version before they can use the platform. If updated terms are published, users must accept the new version before continuing.
 
 **Dataset terms** govern access to specific data resources. Researchers must accept the latest version before they can attach the resource to a project or submit a bundle that references it. If dataset terms are updated, researchers must accept the new version before further use.
 

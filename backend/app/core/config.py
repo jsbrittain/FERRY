@@ -3,8 +3,8 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    postgres_db: str = "epibridge"
-    postgres_user: str = "epibridge"
+    postgres_db: str = "ferry"
+    postgres_user: str = "ferry"
     postgres_password: str
     postgres_host: str = "localhost"
     postgres_port: int = 5432
@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     secret_key: str
 
     public_url: str = "https://localhost"
-    admin_email: str = "admin@epibridge.local"
+    admin_email: str = "admin@ferry.local"
     admin_password: str = "admin"
     session_ttl_seconds: int = 86400
     max_session_ttl_seconds: int = 604800
@@ -48,9 +48,9 @@ class Settings(BaseSettings):
     environment_manifest_dir: str = ""
     example_analysis_dir: str = ""
     template_dir: str = ""
-    output_dir: str = "/var/lib/epibridge/outputs"
+    output_dir: str = "/var/lib/ferry/outputs"
     analysis_bundle_root: str = ""
-    bundle_store_dir: str = "/var/lib/epibridge/bundles"
+    bundle_store_dir: str = "/var/lib/ferry/bundles"
     data_root: str = "/read-only-data"
     host_data_root: str = ""
     host_resource_manifest_dir: str = ""
@@ -59,9 +59,9 @@ class Settings(BaseSettings):
     ollama_model: str = "llama3.2"
     ollama_timeout_seconds: int = 120
 
-    image_registry_prefix: str = "epibridge/builds"
+    image_registry_prefix: str = "ferry/builds"
 
-    release_dir: str = "/var/lib/epibridge/releases"
+    release_dir: str = "/var/lib/ferry/releases"
     log_level: str = "INFO"
 
     execution_mem_limit: str = "4g"
@@ -76,7 +76,7 @@ class Settings(BaseSettings):
     smtp_password: str = ""
     smtp_tls: bool = True
     smtp_from: str = "noreply@example.org"
-    smtp_from_name: str = "EpiBridge"
+    smtp_from_name: str = "FERRY"
 
     @property
     def database_url(self) -> str:

@@ -1,12 +1,12 @@
-VM_HOST      ?= epibridge.local
-VM_USER      ?= epibridge
-VM_DIR       ?= /opt/epibridge
+VM_HOST      ?= ferry.local
+VM_USER      ?= ferry
+VM_DIR       ?= /opt/ferry
 SSH          ?= ssh $(VM_USER)@$(VM_HOST)
 PYTHON       ?= python3
 
 # Load execution context (silent if absent — defaults to native Docker).
--include .epibridge-context
-EPIBRIDGE_TARGET ?= native
+-include .ferry-context
+FERRY_TARGET ?= native
 
 .PHONY: install uninstall start stop restart build upgrade backup restore certs enable-ai seed-demo logs shell register-resources register-resource dev-prune-resources dev test-backend test-execution dev-destroy dev-drop-db deploy deploy-dev ci ci-clean test format lint fix playwright new-data-resource
 
@@ -28,9 +28,9 @@ install:
 ifeq ($(TARGET),orbstack)
 	./scripts/orbstack.sh create
 	./scripts/orbstack.sh mount
-	@echo "EPIBRIDGE_TARGET=$(TARGET)" > .epibridge-context
-	@echo "EPIBRIDGE_VM=epibridge" >> .epibridge-context
-	@echo "EPIBRIDGE_REACHABLE_URL=https://localhost" >> .epibridge-context
+	@echo "FERRY_TARGET=$(TARGET)" > .ferry-context
+	@echo "FERRY_VM=ferry" >> .ferry-context
+	@echo "FERRY_REACHABLE_URL=https://localhost" >> .ferry-context
 	./scripts/init-config.sh
 	./scripts/setup-certs.sh
 	./scripts/platform.sh run ./scripts/install.sh --dev
@@ -38,11 +38,11 @@ ifeq ($(TARGET),orbstack)
 else ifeq ($(TARGET),multipass)
 	./scripts/multipass.sh create
 	./scripts/multipass.sh mount
-	@echo "EPIBRIDGE_TARGET=$(TARGET)" > .epibridge-context
-	@echo "EPIBRIDGE_VM=epibridge" >> .epibridge-context
+	@echo "FERRY_TARGET=$(TARGET)" > .ferry-context
+	@echo "FERRY_VM=ferry" >> .ferry-context
 	@VM_IP=$$(./scripts/multipass.sh ip 2>/dev/null); \
 	if [ -n "$$VM_IP" ]; then \
-		echo "EPIBRIDGE_REACHABLE_URL=https://$$VM_IP" >> .epibridge-context; \
+		echo "FERRY_REACHABLE_URL=https://$$VM_IP" >> .ferry-context; \
 		./scripts/init-config.sh; \
 		./scripts/setup-certs.sh; \
 	fi
@@ -65,18 +65,18 @@ else
 	@exit 1
 endif
 	@echo ""
-	@echo "=== EpiBridge installed ==="
+	@echo "=== FERRY installed ==="
 	@echo ""
 	@echo "Frontend:"
 ifeq ($(TARGET),multipass)
-	@echo "  $$(sed -n 's/^EPIBRIDGE_REACHABLE_URL=//p' .epibridge-context 2>/dev/null)/"
+	@echo "  $$(sed -n 's/^FERRY_REACHABLE_URL=//p' .ferry-context 2>/dev/null)/"
 else
 	@echo "  https://localhost/"
 endif
 	@echo ""
 	@echo "Administrator account:"
 	@echo "  Email:"
-	@echo "      admin@epibridge.local"
+	@echo "      admin@ferry.local"
 	@echo "  Password:"
 	@echo "      Stored as ADMIN_PASSWORD in .env"
 	@echo ""
@@ -89,7 +89,7 @@ endif
 		echo "    - administrator password"; \
 		echo "    - application secrets"; \
 		if [ "$(TARGET)" = "multipass" ]; then \
-			echo "    - EPIBRIDGE_REACHABLE_URL set to the VM IP"; \
+			echo "    - FERRY_REACHABLE_URL set to the VM IP"; \
 		fi; \
 		echo "    - optional SMTP configuration"; \
 	else \
@@ -106,22 +106,22 @@ endif
 	@echo "    make seed-demo"
 
 # uninstall stops the platform and removes the installation.
-# Dispatch depends on the execution context (.epibridge-context).
+# Dispatch depends on the execution context (.ferry-context).
 # The Git working tree and .env are preserved.
 
 # Detect explicit TARGET= override for uninstall recovery.
 # When TARGET is set on the command line (not inherited from the
 # default), it is passed as an environment variable override so
 # that platform.sh can dispatch to the correct backend even when
-# .epibridge-context is missing.
+# .ferry-context is missing.
 ifneq ($(origin TARGET),command line)
-_EPIBRIDGE_TARGET_OVERRIDE :=
+_FERRY_TARGET_OVERRIDE :=
 else
-_EPIBRIDGE_TARGET_OVERRIDE := EPIBRIDGE_TARGET=$(TARGET)
+_FERRY_TARGET_OVERRIDE := FERRY_TARGET=$(TARGET)
 endif
 
 uninstall:
-	@if [ ! -f .epibridge-context ] && [ -z "$(_EPIBRIDGE_TARGET_OVERRIDE)" ]; then \
+	@if [ ! -f .ferry-context ] && [ -z "$(_FERRY_TARGET_OVERRIDE)" ]; then \
 		echo "No execution context found."; \
 		echo ""; \
 		echo "Specify the execution backend to uninstall:"; \
@@ -131,10 +131,10 @@ uninstall:
 		echo "    make uninstall TARGET=native"; \
 		exit 1; \
 	fi; \
-	echo "=== EpiBridge Uninstall ==="; \
-	$(_EPIBRIDGE_TARGET_OVERRIDE) ./scripts/platform.sh compose down 2>/dev/null || true; \
-	$(_EPIBRIDGE_TARGET_OVERRIDE) ./scripts/platform.sh destroy || true; \
-	rm -f .epibridge-context; \
+	echo "=== FERRY Uninstall ==="; \
+	$(_FERRY_TARGET_OVERRIDE) ./scripts/platform.sh compose down 2>/dev/null || true; \
+	$(_FERRY_TARGET_OVERRIDE) ./scripts/platform.sh destroy || true; \
+	rm -f .ferry-context; \
 	rm -rf certs; \
 	if [ -f .env ]; then \
 		echo ""; \
@@ -147,7 +147,7 @@ uninstall:
 # restart is stop followed by start — no rebuild, no reseed, no migration.
 # upgrade, backup, and restore are maintenance operations.
 
-# Start a running EpiBridge installation.  If the platform runs inside a VM,
+# Start a running FERRY installation.  If the platform runs inside a VM,
 # the VM is started first; then all services are started.
 # No rebuild, no reseed, no migration — this is purely start after stop or reboot.
 start:
@@ -187,7 +187,7 @@ restore:
 # Idempotent: safe to run at any time.
 certs:
 	./scripts/setup-certs.sh
-	@if [ -f .epibridge-context ]; then \
+	@if [ -f .ferry-context ]; then \
 		echo "Restarting reverse proxy..."; \
 		if ./scripts/platform.sh restart reverse-proxy; then \
 			echo ""; \
@@ -217,7 +217,7 @@ OLLAMA_MODEL ?= llama3.2
 
 enable-ai:
 	./scripts/setup-ai.sh
-	@if [ -f .epibridge-context ]; then \
+	@if [ -f .ferry-context ]; then \
 		echo "Starting AI services..."; \
 		./scripts/platform.sh compose --profile ai up -d || { \
 			echo ""; \
@@ -260,7 +260,7 @@ seed-demo:
 	./scripts/platform.sh run ./scripts/seed-personas.sh
 	./scripts/platform.sh run ./scripts/seed-demo.sh
 
-# Register all resource manifests with EpiBridge.
+# Register all resource manifests with FERRY.
 # Creates new resources; skips previously registered ones.
 register-resources:
 	./scripts/platform.sh exec backend python -m app.cli resource-register-all
@@ -281,17 +281,17 @@ shell:
 
 deploy:
 	$(SSH) 'cd $(VM_DIR) && ./scripts/install.sh'
-	@echo "EPIBRIDGE_TARGET=remote" > .epibridge-context
-	@echo "EPIBRIDGE_HOST=$(VM_HOST)" >> .epibridge-context
-	@echo "EPIBRIDGE_USER=$(VM_USER)" >> .epibridge-context
-	@echo "EPIBRIDGE_DIR=$(VM_DIR)" >> .epibridge-context
+	@echo "FERRY_TARGET=remote" > .ferry-context
+	@echo "FERRY_HOST=$(VM_HOST)" >> .ferry-context
+	@echo "FERRY_USER=$(VM_USER)" >> .ferry-context
+	@echo "FERRY_DIR=$(VM_DIR)" >> .ferry-context
 
 deploy-dev:
 	$(SSH) 'cd $(VM_DIR) && ./scripts/install.sh --dev'
-	@echo "EPIBRIDGE_TARGET=remote" > .epibridge-context
-	@echo "EPIBRIDGE_HOST=$(VM_HOST)" >> .epibridge-context
-	@echo "EPIBRIDGE_USER=$(VM_USER)" >> .epibridge-context
-	@echo "EPIBRIDGE_DIR=$(VM_DIR)" >> .epibridge-context
+	@echo "FERRY_TARGET=remote" > .ferry-context
+	@echo "FERRY_HOST=$(VM_HOST)" >> .ferry-context
+	@echo "FERRY_USER=$(VM_USER)" >> .ferry-context
+	@echo "FERRY_DIR=$(VM_DIR)" >> .ferry-context
 
 # --- Development ------------------------------------------------------------------
 # Local development, testing, and CI workflows.
@@ -313,11 +313,11 @@ test-backend:
 # normal package lookup.  Depends on a running stack (make restart / make dev).
 test-execution:
 	@echo "Preparing worker test environment..."
-	docker compose exec --user root backend mkdir -p /worker_src /worker_tests 2>/dev/null
-	docker compose cp worker backend:/worker_src/worker 2>/dev/null
-	docker compose cp worker/tests backend:/worker_tests 2>/dev/null
+	./scripts/platform.sh compose exec --user root backend mkdir -p /worker_src /worker_tests 2>/dev/null
+	./scripts/platform.sh compose cp worker backend:/worker_src/worker 2>/dev/null
+	./scripts/platform.sh compose cp worker/tests backend:/worker_tests 2>/dev/null
 	@echo "Running worker tests..."
-	docker compose exec -e PYTHONPATH=/worker_src/worker backend \
+	./scripts/platform.sh compose exec -e PYTHONPATH=/worker_src/worker backend \
 		python3 -m pytest /worker_tests/ -v --tb=short -p no:cacheprovider
 
 dev-destroy:
@@ -343,7 +343,7 @@ ci:
 	./scripts/platform.sh run ./scripts/seed-institution.sh
 	./scripts/platform.sh run ./scripts/seed-personas.sh
 	./scripts/platform.sh run ./scripts/seed-developer.sh
-	@echo "EPIBRIDGE_TARGET=native" > .epibridge-context
+	@echo "FERRY_TARGET=native" > .ferry-context
 
 # Destroy all CI resources (volumes + .env).
 ci-clean:
@@ -369,7 +369,7 @@ test:
 # Playwright suite (51 sequential API logins across 8 tests).
 playwright:
 	./scripts/platform.sh compose -f docker-compose.yml -f docker-compose.playwright.yml up -d backend
-	@BASE=$${PLAYWRIGHT_BASE_URL:-$$(sed -n 's/^EPIBRIDGE_REACHABLE_URL=//p' .epibridge-context 2>/dev/null || true)}; \
+	@BASE=$${PLAYWRIGHT_BASE_URL:-$$(sed -n 's/^FERRY_REACHABLE_URL=//p' .ferry-context 2>/dev/null || true)}; \
 	if [ -z "$$BASE" ] && [ -f .env ]; then \
 		BASE=$$(sed -n 's/^PUBLIC_URL=//p' .env 2>/dev/null || true); \
 	fi; \
@@ -403,9 +403,9 @@ dev-drop-db:
 	@echo ""
 	@read -p " Continue? [y/N] " confirm; \
 	if [ "$$confirm" != "y" ]; then echo "Aborted."; exit 1; fi
-	./scripts/platform.sh compose exec -T postgres psql -U epibridge -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;" 2>/dev/null || \
+	./scripts/platform.sh compose exec -T postgres psql -U ferry -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;" 2>/dev/null || \
 		(./scripts/platform.sh compose up -d postgres && sleep 3 && \
-		 ./scripts/platform.sh compose exec -T postgres psql -U epibridge -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;")
+		 ./scripts/platform.sh compose exec -T postgres psql -U ferry -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;")
 	./scripts/platform.sh restart backend
 	@echo ""
 	@echo "=== Database reset (all tables recreated on startup) ==="

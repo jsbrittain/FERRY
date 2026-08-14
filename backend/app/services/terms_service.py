@@ -232,13 +232,13 @@ def get_acceptance_counts(
 
 
 DEFAULT_PLATFORM_TERMS_VERSION = "1.0.0"
-DEFAULT_PLATFORM_TERMS_TITLE = "EpiBridge Platform Terms of Service"
+DEFAULT_PLATFORM_TERMS_TITLE = "FERRY Platform Terms of Service"
 DEFAULT_PLATFORM_TERMS_CONTENT = """\
-# EpiBridge Terms of Service
+# FERRY Terms of Service
 
 ## Acceptance of Terms
 
-By using the EpiBridge platform, you agree to these terms of service.
+By using the FERRY platform, you agree to these terms of service.
 
 ## Researcher Responsibilities
 
@@ -279,7 +279,7 @@ Any publications arising from this data must acknowledge the source.
 
 
 def seed_terms(db: Session) -> dict:
-    admin = db.query(User).filter(User.email == "admin@epibridge.local").first()
+    admin = db.query(User).filter(User.email == "admin@ferry.local").first()
     if admin is None:
         return {
             "status": "error",

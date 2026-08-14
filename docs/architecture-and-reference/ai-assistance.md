@@ -1,6 +1,6 @@
 # AI-Assisted Analysis Summaries
 
-EpiBridge can optionally use a local AI model to generate a natural-language
+FERRY can optionally use a local AI model to generate a natural-language
 summary of uploaded Analysis Bundles. This feature helps researchers understand
 what an uploaded analysis appears to do before executing it.
 
@@ -63,7 +63,7 @@ docker compose exec ollama ollama pull llama3.2
 For OrbStack deployments:
 
 ```bash
-./scripts/orbstack.sh ssh 'cd /opt/epibridge && docker compose exec ollama ollama pull llama3.2'
+./scripts/orbstack.sh ssh 'cd /opt/ferry && docker compose exec ollama ollama pull llama3.2'
 ```
 
 Supported models include any model available in the

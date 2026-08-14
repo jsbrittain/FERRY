@@ -11,7 +11,7 @@ The Dockerfile is available from the **Technical Reference** tab on this page,
 or directly at `execution-environments/conda/Dockerfile` in the repository.
 
 ```sh
-docker build -t epibridge/conda:latest .
+docker build -t ferry/conda:latest .
 ```
 
 ### Run with your dependencies
@@ -23,7 +23,7 @@ docker run --rm -it \
   -v $(pwd):/analysis \
   -v $(pwd)/data:/data:ro \
   -v $(pwd)/output:/output \
-  epibridge/conda:latest \
+  ferry/conda:latest \
   sh -c "micromamba install -y -n base -f /analysis/environment.yml && micromamba clean --all --yes && python /analysis/run.py"
 ```
 
@@ -35,7 +35,7 @@ Explore the runtime interactively:
 docker run --rm -it \
   -v $(pwd):/analysis \
   -v $(pwd)/data:/data:ro \
-  epibridge/conda:latest \
+  ferry/conda:latest \
   /bin/bash
 ```
 

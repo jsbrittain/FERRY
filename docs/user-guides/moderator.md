@@ -1,6 +1,6 @@
 # Moderator Guide
 
-Task-oriented documentation for moderators using EpiBridge.
+Task-oriented documentation for moderators using FERRY.
 
 ## Who is a Moderator?
 

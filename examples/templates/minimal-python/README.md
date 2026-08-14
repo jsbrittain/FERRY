@@ -12,7 +12,7 @@ A minimal Python analysis bundle structure for [Python 3.14](/environments/pytho
 1. Download `template.zip`
 2. Extract and customise `run.py`
 3. Add your analysis code
-4. Zip the files and upload to EpiBridge
+4. Zip the files and upload to FERRY
 
 ### Bundle Structure
 

@@ -1,7 +1,7 @@
 [project]
-name = "epibridge-worker"
+name = "ferry-worker"
 version = "0.1.0"
-description = "EpiBridge job executor"
+description = "FERRY job executor"
 requires-python = ">=3.11"
 # Dependencies are inherited from the backend package, which is
 # installed first in the Docker build (see worker/Dockerfile).

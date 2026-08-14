@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EPIBRIDGE_HOME="${EPIBRIDGE_HOME:-/opt/epibridge}"
-COMPOSE_FILE="${EPIBRIDGE_HOME}/docker-compose.yml"
+FERRY_HOME="${FERRY_HOME:-/opt/ferry}"
+COMPOSE_FILE="${FERRY_HOME}/docker-compose.yml"
 
 # Parse --no-backup flag
 SKIP_BACKUP=false
@@ -24,15 +24,15 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-echo "=== EpiBridge Upgrade ==="
+echo "=== FERRY Upgrade ==="
 
-if [ ! -d "$EPIBRIDGE_HOME/.git" ]; then
-  echo "Error: $EPIBRIDGE_HOME is not a git repository."
+if [ ! -d "$FERRY_HOME/.git" ]; then
+  echo "Error: $FERRY_HOME is not a git repository."
   echo "Run install.sh first."
   exit 1
 fi
 
-cd "$EPIBRIDGE_HOME"
+cd "$FERRY_HOME"
 
 # Create a pre-upgrade backup unless explicitly skipped
 if [ "$SKIP_BACKUP" = false ]; then
@@ -70,7 +70,7 @@ docker compose -f "$COMPOSE_FILE" build
 # Rebuild analysis container images
 echo "Rebuilding analysis container images..."
 for dir in execution-environments/*/; do
-    tag="epibridge/$(basename "$dir"):latest"
+    tag="ferry/$(basename "$dir"):latest"
     echo "  Building $tag..."
     docker build -t "$tag" "$dir"
 done
@@ -81,7 +81,7 @@ docker compose -f "$COMPOSE_FILE" up -d
 
 # Wait for database
 echo "Waiting for PostgreSQL..."
-until docker compose -f "$COMPOSE_FILE" exec -T postgres pg_isready -U epibridge 2>/dev/null; do
+until docker compose -f "$COMPOSE_FILE" exec -T postgres pg_isready -U ferry 2>/dev/null; do
   sleep 2
 done
 
@@ -94,4 +94,4 @@ echo "Running health checks..."
 ./scripts/healthcheck.sh
 
 echo ""
-echo "=== EpiBridge upgrade complete ==="
+echo "=== FERRY upgrade complete ==="

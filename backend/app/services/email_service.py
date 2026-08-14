@@ -4,7 +4,7 @@ from email.message import EmailMessage
 
 from app.core.config import settings
 
-logger = logging.getLogger("epibridge")
+logger = logging.getLogger("ferry")
 
 
 def send_email(to: str, subject: str, body: str) -> None:

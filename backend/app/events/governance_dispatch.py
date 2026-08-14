@@ -28,12 +28,12 @@ def _dispatch(output_set_id: uuid.UUID) -> None:
 
 @event.listens_for(SASession, "after_commit")
 def _dispatch_governance_events(session: SASession) -> None:
-    pending = getattr(session, "_epibridge_governance_events", [])
+    pending = getattr(session, "_ferry_governance_events", [])
     for output_set_id in pending:
         _dispatch(output_set_id)
 
 
 @event.listens_for(SASession, "after_rollback")
 def _clear_governance_events(session: SASession) -> None:
-    if hasattr(session, "_epibridge_governance_events"):
-        session._epibridge_governance_events.clear()
+    if hasattr(session, "_ferry_governance_events"):
+        session._ferry_governance_events.clear()

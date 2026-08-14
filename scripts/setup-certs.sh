@@ -15,8 +15,8 @@ set -euo pipefail
 #
 # Output: certs/<hostname>.pem, certs/<hostname>-key.pem
 
-if [ -z "${PUBLIC_URL:-}" ] && [ -f .epibridge-context ]; then
-    PUBLIC_URL="$(sed -n 's/^EPIBRIDGE_REACHABLE_URL=//p' .epibridge-context 2>/dev/null || true)"
+if [ -z "${PUBLIC_URL:-}" ] && [ -f .ferry-context ]; then
+    PUBLIC_URL="$(sed -n 's/^FERRY_REACHABLE_URL=//p' .ferry-context 2>/dev/null || true)"
 fi
 PUBLIC_URL="${PUBLIC_URL:-$(sed -n 's/^PUBLIC_URL=//p' .env 2>/dev/null || true)}"
 PUBLIC_URL="${PUBLIC_URL:-https://localhost}"

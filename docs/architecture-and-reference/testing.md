@@ -2,7 +2,7 @@
 
 ## Philosophy
 
-EpiBridge's testing strategy follows a layered approach. Each layer validates a different concern, from individual function correctness through to end-to-end institutional workflow.
+FERRY's testing strategy follows a layered approach. Each layer validates a different concern, from individual function correctness through to end-to-end institutional workflow.
 
 The layers are:
 
@@ -31,7 +31,7 @@ Key areas:
 
 ## Integration Tests
 
-Integration tests validate service-layer behaviour against a real PostgreSQL database and Redis instance. They use a dedicated `epibridge_test` database for isolation.
+Integration tests validate service-layer behaviour against a real PostgreSQL database and Redis instance. They use a dedicated `ferry_test` database for isolation.
 
 ```
 python -m pytest backend/tests/integration -v
@@ -46,10 +46,10 @@ Key areas:
 - Terms governance (publish, accept, enforce)
 - Validation request lifecycle
 
-Integration tests require PostgreSQL + Redis running on localhost with the `epibridge_test` database created:
+Integration tests require PostgreSQL + Redis running on localhost with the `ferry_test` database created:
 
 ```
-createdb epibridge_test
+createdb ferry_test
 ```
 
 ## Smoke Tests
@@ -147,9 +147,9 @@ The following e2e tests continue to run in CI and validate specific feature area
 | Command | What it runs | Prerequisites |
 |---------|-------------|---------------|
 | `python -m pytest backend/tests/unit -v` | Unit tests | None |
-| `python -m pytest backend/tests/integration -v` | Integration tests | PostgreSQL + Redis + `epibridge_test` |
+| `python -m pytest backend/tests/integration -v` | Integration tests | PostgreSQL + Redis + `ferry_test` |
 | `python -m pytest backend/tests/smoke -v` | Smoke tests | Full running stack |
-| `make test` | Unit + integration + smoke (native) | PostgreSQL + Redis + `epibridge_test` |
+| `make test` | Unit + integration + smoke (native) | PostgreSQL + Redis + `ferry_test` |
 | `make test-backend` | Full suite (in container via SSH) | OrbStack VM + Docker stack |
 | `make playwright` | Institutional acceptance | Full running stack |
 | `make playwright CMD=e2e/acceptance/researcher.spec.ts` | Researcher persona acceptance | Full running stack |

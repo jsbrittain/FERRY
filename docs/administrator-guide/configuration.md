@@ -1,10 +1,10 @@
 # Configuration
 
-Configuring EpiBridge for your institution.
+Configuring FERRY for your institution.
 
 ## The `.env` file
 
-EpiBridge is configured through a single `.env` file at the repository root. It is created automatically during installation and preserved across re-installations.
+FERRY is configured through a single `.env` file at the repository root. It is created automatically during installation and preserved across re-installations.
 
 ### Required settings
 
@@ -16,13 +16,13 @@ EpiBridge is configured through a single `.env` file at the repository root. It 
 
 ### Public URL
 
-`PUBLIC_URL` must be the address at which users reach EpiBridge in their browser. Examples:
+`PUBLIC_URL` must be the address at which users reach FERRY in their browser. Examples:
 
 | Deployment | `PUBLIC_URL` |
 |------------|--------------|
 | Local evaluation | `https://localhost` |
-| Production (standard port) | `https://epibridge.institution.edu` |
-| Production (non-standard port) | `https://epibridge.institution.edu:8443` |
+| Production (standard port) | `https://ferry.institution.edu` |
+| Production (non-standard port) | `https://ferry.institution.edu:8443` |
 
 This value is used in email notification links. If it is wrong, users will receive emails with unreachable links.
 
@@ -47,7 +47,7 @@ Email notifications are optional. Without SMTP configuration, the platform funct
 | `SMTP_PASSWORD` | — | SMTP authentication password |
 | `SMTP_TLS` | `true` | Enable STARTTLS |
 | `SMTP_FROM` | `noreply@example.org` | Notification sender address |
-| `SMTP_FROM_NAME` | `EpiBridge` | Notification sender display name |
+| `SMTP_FROM_NAME` | `FERRY` | Notification sender display name |
 
 When configuring SMTP:
 
@@ -56,7 +56,7 @@ When configuring SMTP:
 
 ### HTTPS and certificates
 
-EpiBridge requires HTTPS for secure session cookies. In development, trusted certificates are generated automatically using mkcert.
+FERRY requires HTTPS for secure session cookies. In development, trusted certificates are generated automatically using mkcert.
 
 **Regenerate certificates:**
 
@@ -64,7 +64,7 @@ EpiBridge requires HTTPS for secure session cookies. In development, trusted cer
 make certs
 ```
 
-In production, configure TLS at the reverse proxy level. The Docker Compose deployment includes a Caddy reverse proxy that handles TLS termination. Configure your domain's DNS to point to the EpiBridge server, and Caddy will obtain Let's Encrypt certificates automatically.
+In production, configure TLS at the reverse proxy level. The Docker Compose deployment includes a Caddy reverse proxy that handles TLS termination. Configure your domain's DNS to point to the FERRY server, and Caddy will obtain Let's Encrypt certificates automatically.
 
 ### Security settings
 
@@ -128,7 +128,7 @@ In production, both should point to the same host directory:
 
 ```
 RESOURCE_MANIFEST_DIR: /resources
-HOST_RESOURCE_MANIFEST_DIR: /var/lib/epibridge/resources
+HOST_RESOURCE_MANIFEST_DIR: /var/lib/ferry/resources
 ```
 
 The `HOST_RESOURCE_MANIFEST_DIR` must match the path on the host running

@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { login } from "../helpers/auth";
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@epibridge.local";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@ferry.local";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin";
 
 test("Administrator Acceptance", async ({ page }) => {

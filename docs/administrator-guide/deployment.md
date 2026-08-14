@@ -1,6 +1,6 @@
 # Deployment
 
-Deploying EpiBridge for institutional use.
+Deploying FERRY for institutional use.
 
 ## Supported installation targets
 
@@ -9,7 +9,7 @@ Deploying EpiBridge for institutional use.
 The default installation creates a dedicated Linux virtual machine via OrbStack. This is the recommended path for evaluation and local development because it provides a clean, isolated environment that mirrors production.
 
 The VM contains:
-- All EpiBridge services (frontend, backend, worker, PostgreSQL, Redis)
+- All FERRY services (frontend, backend, worker, PostgreSQL, Redis)
 - Docker Engine for analysis container execution
 - The resource registry (database index of registered assets)
 - A well-known location for institutional data: `/read-only-data`
@@ -18,7 +18,7 @@ The OrbStack VM is a **development convenience**, not a production requirement. 
 
 ### Native Docker
 
-For CI environments or when a VM is impractical, EpiBridge runs directly on the host:
+For CI environments or when a VM is impractical, FERRY runs directly on the host:
 
 ```bash
 make install TARGET=native
@@ -28,7 +28,7 @@ This uses the host's Docker Engine directly. All services run as regular contain
 
 ### Production
 
-For production deployment, EpiBridge runs on a Linux server with Docker Engine. The reference deployment uses:
+For production deployment, FERRY runs on a Linux server with Docker Engine. The reference deployment uses:
 - Docker Compose for service orchestration
 - Caddy as the reverse proxy (TLS termination, security headers, request size limits)
 - PostgreSQL for the application database
@@ -48,19 +48,19 @@ The platform handles database migrations automatically on startup.
 
 ## Separation of concerns
 
-EpiBridge distinguishes between two categories of runtime configuration:
+FERRY distinguishes between two categories of runtime configuration:
 
 ### Application configuration (`.env`)
 
-`.env` contains EpiBridge's own settings: secrets, database credentials, SMTP relay details, the public URL, and application-level toggles. This is the configuration that EpiBridge needs to run.
+`.env` contains FERRY's own settings: secrets, database credentials, SMTP relay details, the public URL, and application-level toggles. This is the configuration that FERRY needs to run.
 
 `.env` is preserved across installations. It is created once and updated manually when settings change.
 
-### Execution context (`.epibridge-context`)
+### Execution context (`.ferry-context`)
 
-The execution context describes the institutional environment in which EpiBridge operates — specifically, where authoritative data resources live on the host filesystem.
+The execution context describes the institutional environment in which FERRY operates — specifically, where authoritative data resources live on the host filesystem.
 
-The context file tells EpiBridge:
+The context file tells FERRY:
 - Which host directories contain institutional data
 - How those directories should be mounted (read-only) into the platform VM
 - What paths correspond to which resource aliases
@@ -74,7 +74,7 @@ This separation means:
 
 ## What the platform needs from the host
 
-EpiBridge requires:
+FERRY requires:
 
 | Resource | Purpose |
 |----------|---------|
@@ -98,7 +98,7 @@ four-step workflow:
    (NFS, local disk, cloud object storage, etc.)
 2. **Mount at `/read-only-data`** — make the data available at the platform's
    well-known location
-3. **Register with EpiBridge** — scaffold the resource skeleton and register
+3. **Register with FERRY** — scaffold the resource skeleton and register
    it through the platform
 4. **Publish terms** — publish dataset terms through the admin UI (optional)
 

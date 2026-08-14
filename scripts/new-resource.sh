@@ -6,7 +6,7 @@ set -euo pipefail
 # Creates resources/<identifier>/ from the template at
 # examples/templates/resource/, substituting template variables.
 #
-# This script does NOT register the resource with EpiBridge.
+# This script does NOT register the resource with FERRY.
 # After reviewing and populating the skeleton, run:
 #
 #   make register-resources
@@ -81,5 +81,5 @@ echo "  1. Place data files in resources/$ID/data/"
 echo "  2. Review and edit the manifest: resources/$ID/manifest.yaml"
 echo "  3. Add representative data to resources/$ID/representative/"
 echo "  4. Edit documentation: resources/$ID/SCHEMA.md, DOCUMENTATION.md"
-echo "  5. Register with EpiBridge: make register-resources"
+echo "  5. Register with FERRY: make register-resources"
 echo ""

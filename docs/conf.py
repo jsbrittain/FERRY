@@ -5,7 +5,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "EpiBridge"
+project = "FERRY"
 copyright = "2026, Kraemer-Lab"
 author = "Kraemer-Lab"
 

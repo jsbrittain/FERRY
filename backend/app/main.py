@@ -37,7 +37,7 @@ from app.services.manifest_loader import load_resource_directory
 from app.services.resource_registration import register_from_manifest
 from app.services.session_service import cleanup_expired_sessions
 
-logger = logging.getLogger("epibridge")
+logger = logging.getLogger("ferry")
 
 
 @asynccontextmanager
@@ -100,7 +100,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="EpiBridge", lifespan=lifespan)
+app = FastAPI(title="FERRY", lifespan=lifespan)
 
 app.include_router(health_router, prefix="/api")
 app.include_router(ai_router, prefix="/api")

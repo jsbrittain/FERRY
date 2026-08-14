@@ -36,9 +36,9 @@ jobs:
         python -m pytest tests/unit -v --cov=app --cov-report=term-missing
 
     - name: Create storage directories
-      run: sudo mkdir -p /var/lib/epibridge/{bundles,outputs,releases} /var/log/epibridge && sudo chown -R 1000:1000 /var/lib/epibridge /var/log/epibridge
+      run: sudo mkdir -p /var/lib/ferry/{bundles,outputs,releases} /var/log/ferry && sudo chown -R 1000:1000 /var/lib/ferry /var/log/ferry
 
-    - name: Bootstrap EpiBridge
+    - name: Bootstrap FERRY
       run: make ci
 
     - name: Run integration tests
@@ -55,7 +55,7 @@ jobs:
         npm ci
         npx playwright install --with-deps chromium
         ADMIN_PASSWORD=$(grep ^ADMIN_PASSWORD= ../.env | sed 's/^ADMIN_PASSWORD=//') \
-        MAINTAINER_EMAIL=maintainer@epibridge.local \
+        MAINTAINER_EMAIL=maintainer@ferry.local \
         MAINTAINER_PASSWORD=maintainer \
         npx playwright test
 

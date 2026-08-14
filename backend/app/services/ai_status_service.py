@@ -3,7 +3,7 @@ import logging
 from app.ai import get_ai_provider
 from app.ai.base import ProviderStatus
 
-logger = logging.getLogger("epibridge.ai.status")
+logger = logging.getLogger("ferry.ai.status")
 
 
 def check_ai_status() -> ProviderStatus:

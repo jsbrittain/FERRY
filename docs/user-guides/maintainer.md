@@ -1,6 +1,6 @@
 # Maintainer Guide
 
-Task-oriented documentation for maintainers using EpiBridge.
+Task-oriented documentation for maintainers using FERRY.
 
 ## Who is a Maintainer?
 

@@ -4,7 +4,7 @@ def render_bundle_submitted(
     submitter_name: str,
     review_url: str,
 ) -> tuple[str, str]:
-    subject = "[EpiBridge] Bundle submitted for approval"
+    subject = "[FERRY] Bundle submitted for approval"
     body = (
         f"{project_name}\n\n{bundle_name}\n\n{submitter_name}\n\nReview:\n{review_url}"
     )
@@ -16,6 +16,6 @@ def render_output_released(
     bundle_name: str,
     results_url: str,
 ) -> tuple[str, str]:
-    subject = "[EpiBridge] Results available"
+    subject = "[FERRY] Results available"
     body = f"{project_name}\n\n{bundle_name}\n\nResults:\n{results_url}"
     return subject, body

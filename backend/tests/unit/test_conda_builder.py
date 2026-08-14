@@ -75,7 +75,7 @@ class TestCondaBuilder:
     ):
         mock_client = MagicMock()
         mock_image = MagicMock()
-        mock_image.tags = ["epibridge/builds/test:abc"]
+        mock_image.tags = ["ferry/builds/test:abc"]
         mock_client.images.build.return_value = (mock_image, [])
         mock_client.images.get.return_value = None
         mock_docker_from_env.return_value = mock_client
@@ -90,11 +90,11 @@ class TestCondaBuilder:
             result = self.builder.build(
                 bundle_path=bundle_path,
                 dockerfile=dockerfile,
-                base_image="epibridge/conda:latest",
-                image_tag="epibridge/builds/test:abc",
+                base_image="ferry/conda:latest",
+                image_tag="ferry/builds/test:abc",
             )
 
-        assert result.image_reference == "epibridge/builds/test:abc"
+        assert result.image_reference == "ferry/builds/test:abc"
         assert result.duration_seconds >= 0
         mock_client.images.build.assert_called_once()
 
@@ -103,7 +103,7 @@ class TestCondaBuilder:
     def test_build_accepts_environment_yaml(self, mock_copy2, mock_docker_from_env):
         mock_client = MagicMock()
         mock_image = MagicMock()
-        mock_image.tags = ["epibridge/builds/test:def"]
+        mock_image.tags = ["ferry/builds/test:def"]
         mock_client.images.build.return_value = (mock_image, [])
         mock_client.images.get.return_value = None
         mock_docker_from_env.return_value = mock_client
@@ -118,8 +118,8 @@ class TestCondaBuilder:
             result = self.builder.build(
                 bundle_path=bundle_path,
                 dockerfile=dockerfile,
-                base_image="epibridge/conda:latest",
-                image_tag="epibridge/builds/test:def",
+                base_image="ferry/conda:latest",
+                image_tag="ferry/builds/test:def",
             )
 
         assert result.success is True
@@ -144,8 +144,8 @@ class TestCondaBuilder:
             result = self.builder.build(
                 bundle_path=bundle_path,
                 dockerfile=dockerfile,
-                base_image="epibridge/conda:latest",
-                image_tag="epibridge/builds/test:abc",
+                base_image="ferry/conda:latest",
+                image_tag="ferry/builds/test:abc",
             )
 
         assert result.success is False
@@ -158,8 +158,8 @@ class TestCondaBuilder:
             result = self.builder.build(
                 bundle_path=bundle_path,
                 dockerfile=dockerfile,
-                base_image="epibridge/conda:latest",
-                image_tag="epibridge/builds/test:abc",
+                base_image="ferry/conda:latest",
+                image_tag="ferry/builds/test:abc",
             )
         assert result.success is False
         assert "environment.yml" in result.build_log
@@ -174,8 +174,8 @@ class TestCondaBuilder:
                 self.builder.build(
                     bundle_path=bundle_path,
                     dockerfile=missing_dockerfile,
-                    base_image="epibridge/conda:latest",
-                    image_tag="epibridge/builds/test:abc",
+                    base_image="ferry/conda:latest",
+                    image_tag="ferry/builds/test:abc",
                 )
 
     @patch("app.builders.conda.docker.from_env")
@@ -197,7 +197,7 @@ class TestCondaBuilder:
             self.builder.build(
                 bundle_path=bundle_path,
                 dockerfile=dockerfile,
-                base_image="epibridge/conda:latest",
+                base_image="ferry/conda:latest",
                 image_tag="test:tag",
             )
 
@@ -206,7 +206,7 @@ class TestCondaBuilder:
     def test_build_with_custom_dockerfile(self, mock_copy2, mock_docker_from_env):
         mock_client = MagicMock()
         mock_image = MagicMock()
-        mock_image.tags = ["epibridge/builds/test:custom"]
+        mock_image.tags = ["ferry/builds/test:custom"]
         mock_client.images.build.return_value = (mock_image, [])
         mock_client.images.get.return_value = None
         mock_docker_from_env.return_value = mock_client
@@ -222,10 +222,10 @@ class TestCondaBuilder:
             result = self.builder.build(
                 bundle_path=bundle_path,
                 dockerfile=custom_df,
-                base_image="epibridge/conda:latest",
-                image_tag="epibridge/builds/test:custom",
+                base_image="ferry/conda:latest",
+                image_tag="ferry/builds/test:custom",
             )
 
-        assert result.image_reference == "epibridge/builds/test:custom"
+        assert result.image_reference == "ferry/builds/test:custom"
         assert result.success
         mock_client.images.build.assert_called_once()

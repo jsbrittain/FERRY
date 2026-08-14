@@ -145,14 +145,14 @@ The Makefile delegates all execution-backend-specific operations to `scripts/pla
 
 `platform.sh` translates platform operations into execution-backend-specific implementations.
 
-It reads `.epibridge-context` to determine the execution target:
+It reads `.ferry-context` to determine the execution target:
 
 ```text
-EPIBRIDGE_TARGET    — one of: native, orbstack, multipass, remote
-EPIBRIDGE_VM        — VM name (orbstack, multipass)
-EPIBRIDGE_HOST      — remote hostname (remote)
-EPIBRIDGE_USER      — remote SSH user (remote)
-EPIBRIDGE_DIR       — remote directory (remote)
+FERRY_TARGET    — one of: native, orbstack, multipass, remote
+FERRY_VM        — VM name (orbstack, multipass)
+FERRY_HOST      — remote hostname (remote)
+FERRY_USER      — remote SSH user (remote)
+FERRY_DIR       — remote directory (remote)
 ```
 
 Supported commands:
@@ -178,7 +178,7 @@ Each execution backend selects its own orchestration identity. This is an implem
 |---------|-------------------|-----------|
 | native | current host user | direct execution |
 | orbstack | root | SSH as root |
-| multipass | epibridge | `sudo -u epibridge` via `multipass exec` |
+| multipass | ferry | `sudo -u ferry` via `multipass exec` |
 | remote | configured SSH user | SSH as user |
 
 The rest of the platform must never assume a particular orchestration user. Scripts executed via `platform.sh run` run as the backend's orchestration user.
@@ -219,19 +219,19 @@ Operator-facing components (certificate generation, bootstrap, health checks) re
 ```
 $PUBLIC_URL env var              explicit override (any caller)
         ↓
-EPIBRIDGE_REACHABLE_URL         execution context (.epibridge-context)
+FERRY_REACHABLE_URL         execution context (.ferry-context)
         ↓
 PUBLIC_URL (.env)               application configuration
         ↓
 https://localhost               platform default
 ```
 
-`EPIBRIDGE_REACHABLE_URL` is the address through which the current execution environment is externally reachable. It is:
+`FERRY_REACHABLE_URL` is the address through which the current execution environment is externally reachable. It is:
 
 - Backend-owned (set by the Makefile during installation).
-- Stored in `.epibridge-context` — generated, disposable, never application configuration.
+- Stored in `.ferry-context` — generated, disposable, never application configuration.
 - Used by: `setup-certs.sh`, `bootstrap.sh`, `healthcheck.sh` for operator-facing operations.
-- Distinguished from `PUBLIC_URL`: `PUBLIC_URL` is administrator-owned application configuration; `EPIBRIDGE_REACHABLE_URL` is backend-owned execution metadata.
+- Distinguished from `PUBLIC_URL`: `PUBLIC_URL` is administrator-owned application configuration; `FERRY_REACHABLE_URL` is backend-owned execution metadata.
 
 For backends that produce a context (OrbStack, Multipass), operator components use the reachable URL from context. For backends that do not (native Docker, remote SSH), resolution falls through to `.env`'s `PUBLIC_URL`.
 
@@ -240,26 +240,26 @@ For backends that produce a context (OrbStack, Multipass), operator components u
 Docker Compose consumes runtime variables through a materialisation layer rather than reading execution metadata directly.
 
 ```
-.epibridge-context (execution metadata)          .env (application configuration)
+.ferry-context (execution metadata)          .env (application configuration)
         ↓                                                  │
 prepare-env.sh (materialisation)                           │
         ↓                                                  │
-.epibridge-compose.env (runtime overrides)                 │
+.ferry-compose.env (runtime overrides)                 │
         ↓                                                  │
         └──────────────────┬───────────────────────────────┘
                            ▼
           docker compose --env-file ./.env \
-                         --env-file ./.epibridge-compose.env
+                         --env-file ./.ferry-compose.env
 ```
 
-`prepare-env.sh` reads `.epibridge-context` and generates `.epibridge-compose.env` with variables such as `PUBLIC_URL_HOST` for Docker Compose substitution. This file is:
+`prepare-env.sh` reads `.ferry-context` and generates `.ferry-compose.env` with variables such as `PUBLIC_URL_HOST` for Docker Compose substitution. This file is:
 
 - Generated automatically by `platform.sh compose` and `bootstrap.sh`.
 - Never edited manually.
 - Listed in `.gitignore`.
 - Regenerated on every compose invocation.
 
-The `PUBLIC_URL_HOST` variable is derived from `EPIBRIDGE_REACHABLE_URL` at runtime and passed to the Caddy container so that TLS certificates match the address through which the platform is reachable.
+The `PUBLIC_URL_HOST` variable is derived from `FERRY_REACHABLE_URL` at runtime and passed to the Caddy container so that TLS certificates match the address through which the platform is reachable.
 
 ### Security constraints (must preserve in implementation)
 
@@ -381,8 +381,8 @@ These accounts have no password (`password_hash=""`) and cannot authenticate thr
 
 | Actor | UUID | Email | Role |
 |---|---|---|---|
-| System | `00000000-0000-0000-0000-000000000001` | `system@epibridge.internal` | `maintainer` |
-| Execution Worker | `00000000-0000-0000-0000-000000000002` | `execution_worker@epibridge.internal` | `maintainer` |
+| System | `00000000-0000-0000-0000-000000000001` | `system@ferry.internal` | `maintainer` |
+| Execution Worker | `00000000-0000-0000-0000-000000000002` | `execution_worker@ferry.internal` | `maintainer` |
 
 A `role` value is required by the schema; `maintainer` is used as the closest semantic match to a platform operator. No capabilities are assigned — these are audit identities, not RBAC participants.
 
@@ -634,7 +634,7 @@ Each Data Resource may define its own versioned Terms of Service.
 
 #### Seeding
 
-`epibridge seed-terms` publishes default platform terms (Markdown) for development environments. Idempotent — skips if terms already exist.
+`ferry seed-terms` publishes default platform terms (Markdown) for development environments. Idempotent — skips if terms already exist.
 
 ### Health Check
 
@@ -655,7 +655,7 @@ An HTTP middleware logs each request after completion:
 
 - Method, path, response status code, and duration in milliseconds.
 - Request bodies and query parameters are never logged (sensitive data).
-- Logged at `INFO` level via the `epibridge` logger.
+- Logged at `INFO` level via the `ferry` logger.
 
 ### Domain model boundary
 
@@ -669,7 +669,7 @@ An HTTP middleware logs each request after completion:
 
 ### Institutional Personas
 
-EpiBridge defines four institutional personas, each with a distinct scope of responsibility. The persona is derived from the user's role and is surfaced in the UI (header, homepage quick actions, Projects list filtering).
+FERRY defines four institutional personas, each with a distinct scope of responsibility. The persona is derived from the user's role and is surfaced in the UI (header, homepage quick actions, Projects list filtering).
 
 | Persona | Role | Responsibilities |
 |---------|------|------------------|
@@ -777,9 +777,9 @@ The following personas are seeded during `make install` (via `seed-institution.s
 
 | Persona | Email | Password | Role |
 |---------|-------|----------|------|
-| Administrator | `admin@epibridge.local` | From `ADMIN_PASSWORD` in `.env` (generated) | admin |
-| Maintainer | `maintainer@epibridge.local` | `maintainer` | maintainer |
-| Researcher | `researcher@epibridge.local` | `researcher` | researcher |
+| Administrator | `admin@ferry.local` | From `ADMIN_PASSWORD` in `.env` (generated) | admin |
+| Maintainer | `maintainer@ferry.local` | `maintainer` | maintainer |
+| Researcher | `researcher@ferry.local` | `researcher` | researcher |
 
 All three are created idempotently — re-running bootstrap does not duplicate them.
 
@@ -839,7 +839,7 @@ make test         # run tests
   for debugging without native Python setup).
 - `make playwright` — run acceptance tests through Playwright.  The target
   URL is derived from the standard resolution hierarchy:
-  `PLAYWRIGHT_BASE_URL > EPIBRIDGE_REACHABLE_URL > PUBLIC_URL > https://localhost`
+  `PLAYWRIGHT_BASE_URL > FERRY_REACHABLE_URL > PUBLIC_URL > https://localhost`
 - `make playwright CMD=e2e/acceptance/researcher.spec.ts` — run researcher persona acceptance test
 - `make playwright CMD=e2e/acceptance/administrator.spec.ts` — run administrator persona acceptance test
 - `make playwright CMD=e2e/acceptance/moderator.spec.ts` — run moderator persona acceptance test
@@ -866,7 +866,7 @@ Key settings for deployment:
 The `seed-developer.sh` script (run by `make dev` and `make ci`) creates this database automatically.
 For local native runs, create it manually:
 ```
-createdb epibridge_test
+createdb ferry_test
 ```
 
 **CI** (from repo root, requires Docker):
@@ -938,7 +938,7 @@ make playwright CMD=e2e/acceptance/maintainer.spec.ts
 
 The institutional acceptance test (`frontend/e2e/institution/canonical.spec.ts`) proves the entire platform works as an institutional system. It exercises the complete canonical workflow:
 
-1. Opening EpiBridge
+1. Opening FERRY
 2. Login with admin credentials
 3. Publishing platform terms via the admin API
 4. Creating a project
@@ -973,10 +973,10 @@ make playwright CMD=e2e/execution-environment-acceptance/conda.spec.ts
 
 ### Deployment user
 
-Platform services (backend, worker) run as the non-root `epibridge` user. The reference
-deployment provisions matching ownership: `cloud-init.yaml` creates `/var/lib/epibridge/`
+Platform services (backend, worker) run as the non-root `ferry` user. The reference
+deployment provisions matching ownership: `cloud-init.yaml` creates `/var/lib/ferry/`
 owned by UID 1000, and `scripts/bootstrap.sh` applies the same ownership at setup time.
-The container's `epibridge` user uses a matching UID (1000) so that volume-mounted storage
+The container's `ferry` user uses a matching UID (1000) so that volume-mounted storage
 directories are writable without runtime permission workarounds or world-writable fallbacks.
 
 ### Worker resilience

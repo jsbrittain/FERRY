@@ -6,7 +6,7 @@ const docs = [
   {
     slug: "getting-started",
     title: "Getting Started",
-    description: "Overview of the EpiBridge research platform and how to begin.",
+    description: "Overview of the FERRY research platform and how to begin.",
   },
   {
     slug: "bundle-structure",
@@ -35,7 +35,7 @@ export default function DocsIndexPage() {
     <>
       <h1 className="page-title">Researcher Documentation</h1>
       <p style={{ color: "var(--color-text-secondary)", marginBottom: "var(--spacing-lg)", lineHeight: 1.6 }}>
-        Guidance for using the EpiBridge research platform. Topics link to institutional
+        Guidance for using the FERRY research platform. Topics link to institutional
         publications rather than duplicating them.
       </p>
 

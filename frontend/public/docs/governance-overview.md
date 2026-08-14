@@ -1,6 +1,6 @@
 ## Governance Overview
 
-EpiBridge enforces institutional governance through capability-based access control, approval workflows, and a complete audit trail.
+FERRY enforces institutional governance through capability-based access control, approval workflows, and a complete audit trail.
 
 ### Capability-Based Access
 

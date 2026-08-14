@@ -53,7 +53,7 @@ def seed_terms_cmd():
 def create_researcher():
     if len(sys.argv) < 4:
         print(
-            "Usage: epibridge create-user <email> <name> "
+            "Usage: ferry create-user <email> <name> "
             "[--password PASSWORD] [--roles researcher,moderator,...]"
         )
         sys.exit(1)
@@ -100,7 +100,7 @@ def create_researcher():
 
 
 def seed_maintainer():
-    email = "maintainer@epibridge.local"
+    email = "maintainer@ferry.local"
     password = "maintainer"
     display_name = "Maintainer"
 
@@ -132,7 +132,7 @@ def seed_maintainer():
 
 
 def seed_researcher():
-    email = "researcher@epibridge.local"
+    email = "researcher@ferry.local"
     password = "researcher"
     display_name = "Researcher"
 
@@ -158,7 +158,7 @@ def seed_researcher():
 
 
 def seed_moderator():
-    email = "moderator@epibridge.local"
+    email = "moderator@ferry.local"
     password = "moderator"
     display_name = "Moderator"
 
@@ -184,7 +184,7 @@ def seed_moderator():
 
 
 def seed_developer():
-    email = "developer@epibridge.local"
+    email = "developer@ferry.local"
     password = "developer"
     display_name = "Developer"
     roles = list(UserRole)
@@ -403,7 +403,7 @@ def resource_clean():
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: epibridge <command>")
+        print("Usage: ferry <command>")
         print(
             "Commands: seed-admin, seed-moderator, seed-maintainer, "
             "seed-researcher, seed-developer, seed-terms, seed-demo, "
@@ -435,7 +435,7 @@ def main():
         resource_register_all()
     elif command == "resource-register":
         if len(sys.argv) < 3:
-            print("Usage: epibridge resource-register <identifier>")
+            print("Usage: ferry resource-register <identifier>")
             sys.exit(1)
         resource_register(sys.argv[2])
     elif command == "resource-clean":

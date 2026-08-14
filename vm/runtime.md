@@ -1,8 +1,8 @@
-# EpiBridge Runtime Specification
+# FERRY Runtime Specification
 
 ## Version
 
-**EpiBridge Runtime**
+**FERRY Runtime**
 
 ## Target Operating System
 
@@ -24,14 +24,14 @@
 ## Filesystem Layout
 
 ```
-/opt/epibridge              # application repository
-/var/lib/epibridge/data     # institutional data mount point (NFS, cloud storage)
-/var/lib/epibridge/outputs  # job output storage
-/var/log/epibridge          # audit and application logs
+/opt/ferry              # application repository
+/var/lib/ferry/data     # institutional data mount point (NFS, cloud storage)
+/var/lib/ferry/outputs  # job output storage
+/var/log/ferry          # audit and application logs
 ```
 
 The deployment also places institutional data resources at a location of its
-choosing. EpiBridge accesses them through the runtime contract (see below)
+choosing. FERRY accesses them through the runtime contract (see below)
 and never knows the physical host path.
 
 ## Host Dependencies
@@ -57,7 +57,7 @@ Host
 
 ### Host
 
-The host owns the physical data — for example, `/srv/data/`. EpiBridge never
+The host owns the physical data — for example, `/srv/data/`. FERRY never
 knows host paths. The host is outside the trust boundary.
 
 ### Trusted Runtime
@@ -71,9 +71,9 @@ available beneath a well-known location:
 
 This is the **runtime contract**. How resources arrive there (host directory
 mount, NFS share, cloud storage, database connection, etc.) is entirely the
-responsibility of the deployment — never EpiBridge.
+responsibility of the deployment — never FERRY.
 
-EpiBridge only understands:
+FERRY only understands:
 
 - **Data Resources** — registered metadata about an available asset
 - **Resource Providers** — abstractions that validate endpoints and describe
@@ -180,13 +180,13 @@ The exact mechanism depends on your infrastructure. Examples:
 
 ```yaml
 # /etc/fstab
-nfs-server:/data/institutional  /var/lib/epibridge/data  nfs  ro,noexec  0  0
+nfs-server:/data/institutional  /var/lib/ferry/data  nfs  ro,noexec  0  0
 ```
 
 ```yaml
 # docker-compose override
 volumes:
-  - /var/lib/epibridge/data:/read-only-data:ro
+  - /var/lib/ferry/data:/read-only-data:ro
 ```
 
 **Local disk:**
@@ -199,12 +199,12 @@ volumes:
 **Cloud object storage (via S3 FUSE):**
 
 ```bash
-s3fs my-data-bucket /var/lib/epibridge/data -o ro,allow_other
+s3fs my-data-bucket /var/lib/ferry/data -o ro,allow_other
 ```
 
 ```yaml
 volumes:
-  - /var/lib/epibridge/data:/read-only-data:ro
+  - /var/lib/ferry/data:/read-only-data:ro
 ```
 
 The platform never knows the host path. It only sees `/read-only-data`.
@@ -228,7 +228,7 @@ Two separate phases:
 Prepares the OS only:
 
 - installs Docker Engine, Compose, Git, curl
-- creates the `epibridge` user
+- creates the `ferry` user
 - configures UFW firewall
 - creates standard directories
 - enables unattended security updates
@@ -296,7 +296,7 @@ From the repo root:
 make install
 ```
 
-This creates the OrbStack VM (if needed), mounts the repo into `/opt/epibridge`, builds Docker images, starts all services, seeds the admin account and platform terms, and verifies health.
+This creates the OrbStack VM (if needed), mounts the repo into `/opt/ferry`, builds Docker images, starts all services, seeds the admin account and platform terms, and verifies health.
 
 First run takes ~3 minutes. Subsequent runs are near-instant.
 
@@ -338,10 +338,10 @@ Provider-specific setup examples:
 
 | Runtime    | Create VM                          | Mount repo              |
 |------------|------------------------------------|--------------------------|
-| Multipass  | `multipass launch --cloud-init vm/cloud-init.yaml 24.04 --name epibridge-dev` | `multipass mount . epibridge-dev:/opt/epibridge` |
-| Lima       | `limactl start --name=epibridge vm/cloud-init.yaml` | `limactl mount epibridge .` |
+| Multipass  | `multipass launch --cloud-init vm/cloud-init.yaml 24.04 --name ferry-dev` | `multipass mount . ferry-dev:/opt/ferry` |
+| Lima       | `limactl start --name=ferry vm/cloud-init.yaml` | `limactl mount ferry .` |
 | Manual KVM | `virt-install --initrd-inject vm/cloud-init.yaml ...` | 9p/virtiofs mount |
-| AWS EC2    | cloud-init from user-data          | `rsync -avz --exclude .git . epibridge@ip:/opt/epibridge` |
+| AWS EC2    | cloud-init from user-data          | `rsync -avz --exclude .git . ferry@ip:/opt/ferry` |
 
 ### Multipass
 
@@ -349,7 +349,7 @@ Provider-specific setup examples:
 make install TARGET=multipass
 ```
 
-Creates the Multipass VM (if needed), mounts the repo at `/opt/epibridge`,
+Creates the Multipass VM (if needed), mounts the repo at `/opt/ferry`,
 builds Docker images, starts all services, seeds the admin account and
 platform terms, and verifies health.
 
@@ -378,7 +378,7 @@ Individual lifecycle commands work identically to the OrbStack target:
 make start    # start services
 make stop     # stop services
 make logs     # tail container logs
-make shell    # interactive session inside the VM (as epibridge user)
+make shell    # interactive session inside the VM (as ferry user)
 make certs    # regenerate TLS certificates
 make enable-ai    # enable AI assistance
 make seed-demo    # seed evaluation personas
@@ -390,9 +390,9 @@ make uninstall  # stop services and delete the VM
 ```bash
 # 1. Create VM with cloud-init (provider-specific)
 # 2. Copy the repository
-rsync -avz --exclude .git . epibridge@vm-ip:/opt/epibridge
+rsync -avz --exclude .git . ferry@vm-ip:/opt/ferry
 # 3. Install
-make deploy SSH="ssh epibridge@vm-ip"
+make deploy SSH="ssh ferry@vm-ip"
 ```
 
 ## Deployment Targets

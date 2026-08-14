@@ -60,7 +60,7 @@ class PythonBuilder(EnvironmentBuilder):
                 ),
             )
 
-        context_dir = Path(tempfile.mkdtemp(prefix="epibridge-build-"))
+        context_dir = Path(tempfile.mkdtemp(prefix="ferry-build-"))
         try:
             shutil.copy2(str(dockerfile), str(context_dir / DOCKERFILE_NAME))
             shutil.copy2(str(dep_file), str(context_dir / DEPENDENCY_FILE))

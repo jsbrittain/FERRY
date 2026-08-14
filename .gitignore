@@ -34,8 +34,8 @@ Thumbs.db
 .env.*.local
 
 # Execution context and runtime materialisation (generated)
-.epibridge-context
-.epibridge-compose.env
+.ferry-context
+.ferry-compose.env
 
 # Database
 *.db

@@ -11,7 +11,7 @@ The Dockerfile is available from the **Technical Reference** tab on this page,
 or directly at `execution-environments/python-3.14/Dockerfile` in the repository.
 
 ```sh
-docker build -t epibridge/python-3.14:latest .
+docker build -t ferry/python-3.14:latest .
 ```
 
 ### Run with your dependencies
@@ -23,7 +23,7 @@ docker run --rm -it \
   -v $(pwd):/analysis \
   -v $(pwd)/data:/data:ro \
   -v $(pwd)/output:/output \
-  epibridge/python-3.14:latest \
+  ferry/python-3.14:latest \
   sh -c "pip install --no-cache-dir -r /analysis/requirements.txt && python /analysis/run.py"
 ```
 
@@ -35,7 +35,7 @@ Explore the runtime interactively:
 docker run --rm -it \
   -v $(pwd):/analysis \
   -v $(pwd)/data:/data:ro \
-  epibridge/python-3.14:latest \
+  ferry/python-3.14:latest \
   /bin/bash
 ```
 

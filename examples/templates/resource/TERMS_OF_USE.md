@@ -1,6 +1,6 @@
 # {{NAME}} — Terms of Use
 
-This document describes the terms governing use of {{NAME}} within EpiBridge.
+This document describes the terms governing use of {{NAME}} within FERRY.
 
 ## Intended Use
 

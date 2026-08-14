@@ -1,8 +1,8 @@
 # Data Resources
 
-Managing institutional data resources in EpiBridge.
+Managing institutional data resources in FERRY.
 
-EpiBridge registers existing institutional data resources; it does not provision,
+FERRY registers existing institutional data resources; it does not provision,
 synchronise, refresh, or manage the underlying data. The data itself lives
 entirely outside the platform — the recommended deployment model is a read-only
 volume mounted into the platform at a well-known location.
@@ -13,16 +13,16 @@ and governance**, not the data itself.
 ## Adding a new data resource — four-step workflow
 
 ```
-1. Provision your data     →  institution's infrastructure, outside EpiBridge
+1. Provision your data     →  institution's infrastructure, outside FERRY
 2. Mount at /read-only-data →  NFS, local disk, S3 FUSE — your choice
-3. Register with EpiBridge  →  make new-data-resource + make register-resources
+3. Register with FERRY  →  make new-data-resource + make register-resources
 4. Publish terms           →  admin UI (dataset terms)
 ```
 
-### Step 1 — Provision your data (outside EpiBridge)
+### Step 1 — Provision your data (outside FERRY)
 
 Provision storage, place the data files, and configure access using your
-institution's preferred approach. EpiBridge is not involved in this step.
+institution's preferred approach. FERRY is not involved in this step.
 
 ### Step 2 — Mount at /read-only-data
 
@@ -31,7 +31,7 @@ The institution chooses the mechanism — NFS, local disk, cloud storage via
 FUSE, or any other approach. See the [Deployment Guide](deployment.md)
 and [Runtime Specification](../../vm/runtime.md) for details.
 
-### Step 3 — Register with EpiBridge
+### Step 3 — Register with FERRY
 
 Scaffold the resource skeleton, place data files, and register:
 
@@ -48,7 +48,7 @@ cp /path/to/sample.csv resources/uk-biobank-serum/representative/
 # Edit manifest.yaml, SCHEMA.md, DOCUMENTATION.md, and TERMS_OF_USE.md
 # to match the dataset
 
-# Register all resources with EpiBridge (create once, skip if exists)
+# Register all resources with FERRY (create once, skip if exists)
 make register-resources
 ```
 
@@ -59,7 +59,7 @@ make register-resource ID=uk-biobank-serum
 ```
 
 The manifest is used to register the resource. After registration, operational
-management occurs within EpiBridge through the admin API and UI.
+management occurs within FERRY through the admin API and UI.
 
 ### Step 4 — Publish terms
 
@@ -79,10 +79,10 @@ attached to projects.
 
 A **Data Resource** represents an existing institutional data asset that has been
 registered for analysis. The institution owns and manages the underlying data
-files; EpiBridge provides a catalogue of available resources, access control,
+files; FERRY provides a catalogue of available resources, access control,
 and secure execution.
 
-EpiBridge does **not** own, store, or manage scientific data. It never copies
+FERRY does **not** own, store, or manage scientific data. It never copies
 data into its own storage. Instead, it describes where data lives, who may
 access it, and how to mount it securely into analysis containers.
 
@@ -155,7 +155,7 @@ manifests create new records; previously registered manifests are skipped
 without overwriting the database.
 
 The manifest is used to register the resource. After registration, operational
-management occurs within EpiBridge through the admin API and UI.
+management occurs within FERRY through the admin API and UI.
 
 Each manifest may also include:
 - **Documentation** — schemas, READMEs, and usage guidance for researchers
@@ -217,7 +217,7 @@ infrastructure.
 #### Recommended: host-managed storage
 
 The recommended deployment pattern keeps authoritative datasets **outside** the
-EpiBridge execution environment. Institutional storage is managed directly by
+FERRY execution environment. Institutional storage is managed directly by
 the institution and mounted read-only into the platform.
 
 ```
@@ -242,10 +242,10 @@ Host filesystem
    data survives in its original location. Recovery requires only updating the
    mount path.
 3. **Backup is the institution's responsibility.** Institutional backup policies
-   apply directly to the authoritative storage. EpiBridge never needs to
+   apply directly to the authoritative storage. FERRY never needs to
    restore data — only its own metadata (which is backed up separately).
 4. **Access control is layered.** The host filesystem permissions protect data
-   at rest. EpiBridge adds project-scoped authorisation at runtime. Both must
+   at rest. FERRY adds project-scoped authorisation at runtime. Both must
    be satisfied.
 
 #### Read-only mounts
@@ -257,7 +257,7 @@ the platform.
 
 #### VM disposability
 
-Because authoritative data lives outside the EpiBridge VM, the VM is fully
+Because authoritative data lives outside the FERRY VM, the VM is fully
 disposable. You can:
 
 - Destroy and recreate the VM without data loss.
@@ -272,12 +272,12 @@ The only state the VM owns is:
 
 #### Backup implications
 
-Because data lives outside EpiBridge:
+Because data lives outside FERRY:
 
 - **Institutional data** is backed up by the institution's existing storage
-  infrastructure. EpiBridge has no role in this.
+  infrastructure. FERRY has no role in this.
 - **Platform database** (users, projects, bundles, audit events) must be backed
-  up via `backup.sh`. This is the only EpiBridge-owned state that cannot be
+  up via `backup.sh`. This is the only FERRY-owned state that cannot be
   recreated.
 - **Release packages** (delivered outputs) should be archived to long-term
   storage outside the platform for compliance reasons.
@@ -286,7 +286,7 @@ Because data lives outside EpiBridge:
 
 ## Provider types
 
-EpiBridge supports multiple data backends through a **Provider** abstraction.
+FERRY supports multiple data backends through a **Provider** abstraction.
 Each provider knows how to make a specific type of data available inside an
 analysis container:
 

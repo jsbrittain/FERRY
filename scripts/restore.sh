@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EPIBRIDGE_HOME="${EPIBRIDGE_HOME:-/opt/epibridge}"
-BACKUP_DIR="${BACKUP_DIR:-/var/backups/epibridge}"
-COMPOSE_FILE="${EPIBRIDGE_HOME}/docker-compose.yml"
+FERRY_HOME="${FERRY_HOME:-/opt/ferry}"
+BACKUP_DIR="${BACKUP_DIR:-/var/backups/ferry}"
+COMPOSE_FILE="${FERRY_HOME}/docker-compose.yml"
 
 # Parse --yes / -y flag
 CONFIRMED=false
@@ -19,7 +19,7 @@ while [ $# -gt 0 ]; do
       ;;
     -*)
       echo "Usage: $0 [--yes|-y] <backup-file>"
-      echo "Example: $0 /var/backups/epibridge/epibridge_20250101_120000.tar.gz"
+      echo "Example: $0 /var/backups/ferry/ferry_20250101_120000.tar.gz"
       exit 1
       ;;
     *)
@@ -30,7 +30,7 @@ done
 
 if [ $# -ne 1 ]; then
   echo "Usage: $0 [--yes|-y] <backup-file>"
-  echo "Example: $0 /var/backups/epibridge/epibridge_20250101_120000.tar.gz"
+  echo "Example: $0 /var/backups/ferry/ferry_20250101_120000.tar.gz"
   exit 1
 fi
 
@@ -41,7 +41,7 @@ if [ ! -f "$BACKUP_FILE" ]; then
   exit 1
 fi
 
-echo "=== EpiBridge Restore ==="
+echo "=== FERRY Restore ==="
 echo "Backup: $BACKUP_FILE"
 
 # Require explicit confirmation before destructive operations
@@ -62,7 +62,7 @@ if [ "$CONFIRMED" = false ]; then
 fi
 
 # Extract backup
-RESTORE_DIR="/tmp/epibridge_restore_$(date +%s)"
+RESTORE_DIR="/tmp/ferry_restore_$(date +%s)"
 mkdir -p "$RESTORE_DIR"
 tar xzf "$BACKUP_FILE" -C "$RESTORE_DIR"
 
@@ -82,7 +82,7 @@ docker compose -f "$COMPOSE_FILE" down
 # Restore environment config
 if [ -f "${EXTRACTED_DIR}/.env" ]; then
   echo "Restoring .env..."
-  cp "${EXTRACTED_DIR}/.env" "${EPIBRIDGE_HOME}/.env"
+  cp "${EXTRACTED_DIR}/.env" "${FERRY_HOME}/.env"
 fi
 
 # Start database only for restore
@@ -91,18 +91,18 @@ docker compose -f "$COMPOSE_FILE" up -d postgres
 
 # Wait for database
 echo "Waiting for PostgreSQL..."
-until docker compose -f "$COMPOSE_FILE" exec -T postgres pg_isready -U epibridge 2>/dev/null; do
+until docker compose -f "$COMPOSE_FILE" exec -T postgres pg_isready -U ferry 2>/dev/null; do
   sleep 2
 done
 
 # Restore database
 echo "Restoring PostgreSQL..."
-docker compose -f "$COMPOSE_FILE" exec -T postgres psql -U epibridge < "${EXTRACTED_DIR}/postgres.sql"
+docker compose -f "$COMPOSE_FILE" exec -T postgres psql -U ferry < "${EXTRACTED_DIR}/postgres.sql"
 
 # Restore data volumes
 if [ -f "${EXTRACTED_DIR}/data.tar.gz" ]; then
   echo "Restoring data volumes..."
-  sudo tar xzf "${EXTRACTED_DIR}/data.tar.gz" -C /var/lib/epibridge
+  sudo tar xzf "${EXTRACTED_DIR}/data.tar.gz" -C /var/lib/ferry
 fi
 
 # Start all services

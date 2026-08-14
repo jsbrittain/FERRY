@@ -6,7 +6,7 @@ status: active
 # Institution-specified runtime image. During development, build locally from
 # the Dockerfile in this directory. In production, build and publish to a
 # registry chosen by the institution.
-image_reference: "epibridge/conda:latest"
+image_reference: "ferry/conda:latest"
 validation:
   setup_command: >
     if [ -f /analysis/environment.yml ]; then

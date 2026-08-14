@@ -16,7 +16,7 @@ from app.services.output_service import OUTPUT_ROOT
 from app.services.output_set_service import list_outputs_by_set
 from app.services.platform_settings_service import get_setting_bool
 
-logger = logging.getLogger("epibridge.ai.review")
+logger = logging.getLogger("ferry.ai.review")
 
 
 def request_review(bundle_id: uuid.UUID) -> None:

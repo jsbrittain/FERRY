@@ -34,9 +34,9 @@ def ensure_output_set(db: Session, execution_request_id: uuid.UUID) -> OutputSet
     db.add(output_set)
     db.flush()
 
-    if not hasattr(db, "_epibridge_governance_events"):
-        db._epibridge_governance_events = []
-    db._epibridge_governance_events.append(output_set.id)
+    if not hasattr(db, "_ferry_governance_events"):
+        db._ferry_governance_events = []
+    db._ferry_governance_events.append(output_set.id)
 
     return output_set
 

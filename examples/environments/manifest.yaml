@@ -1,4 +1,4 @@
-# EpiBridge Execution Environment Manifest
+# FERRY Execution Environment Manifest
 #
 # Execution Environments are institutional assets representing approved
 # base runtimes from which execution images are built.
@@ -15,7 +15,7 @@ environments:
     # Institution-specified runtime image. During development, build locally
     # from the Dockerfile in this directory. In production, build and publish
     # to a registry chosen by the institution.
-    image_reference: "epibridge/python-3.13:latest"
+    image_reference: "ferry/python-3.13:latest"
 
   - identifier: python-3.14
     name: Python 3.14
@@ -25,7 +25,7 @@ environments:
     # Institution-specified runtime image. During development, build locally
     # from the Dockerfile in this directory. In production, build and publish
     # to a registry chosen by the institution.
-    image_reference: "epibridge/python-3.14:latest"
+    image_reference: "ferry/python-3.14:latest"
 
   - identifier: conda
     name: Conda (Micromamba 2.x)
@@ -35,4 +35,4 @@ environments:
     # Institution-specified runtime image. During development, build locally
     # from the Dockerfile in this directory. In production, build and publish
     # to a registry chosen by the institution.
-    image_reference: "epibridge/conda:latest"
+    image_reference: "ferry/conda:latest"

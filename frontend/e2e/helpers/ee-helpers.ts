@@ -8,11 +8,11 @@ import {
 } from "./setup";
 
 const BASE = process.env.PLAYWRIGHT_BASE_URL || "https://localhost";
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@epibridge.local";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@ferry.local";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin";
 const MODERATOR_PASSWORD = "testpass123";
 const MAINTAINER_EMAIL =
-  process.env.MAINTAINER_EMAIL || "maintainer@epibridge.local";
+  process.env.MAINTAINER_EMAIL || "maintainer@ferry.local";
 const MAINTAINER_PASSWORD = process.env.MAINTAINER_PASSWORD || "maintainer";
 const RESEARCHER_PASSWORD = process.env.RESEARCHER_PASSWORD || "researcher";
 

@@ -12,7 +12,7 @@ The execution environment image is defined in the repository under
 `execution-environments/`. Build it locally from the Dockerfile:
 
 ```sh
-docker build -t epibridge/python-3.14:latest execution-environments/python-3.14/
+docker build -t ferry/python-3.14:latest execution-environments/python-3.14/
 ```
 
 The tag is a local convention. In production, this image would be built and
@@ -35,7 +35,7 @@ docker run --rm -it \
   -v $(pwd):/analysis \
   -v $(pwd)/data:/data:ro \
   -v $(pwd)/output:/output \
-  epibridge/python-3.14:latest \
+  ferry/python-3.14:latest \
   python /analysis/run.py
 ```
 

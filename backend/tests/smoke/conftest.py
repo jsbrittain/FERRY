@@ -11,6 +11,6 @@ def require_stack():
             timeout=5,
         )
         if r.status_code != 200:
-            pytest.skip("EpiBridge stack is not running")
+            pytest.skip("FERRY stack is not running")
     except Exception:
-        pytest.skip("EpiBridge stack is not running")
+        pytest.skip("FERRY stack is not running")

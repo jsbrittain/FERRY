@@ -19,38 +19,38 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-EPIBRIDGE_HOME="${EPIBRIDGE_HOME:-/opt/epibridge}"
-REPO_URL="${REPO_URL:-https://github.com/kraemer-lab/EpiBridge.git}"
+FERRY_HOME="${FERRY_HOME:-/opt/ferry}"
+REPO_URL="${REPO_URL:-https://github.com/kraemer-lab/FERRY.git}"
 BRANCH="${BRANCH:-main}"
 
-echo "=== EpiBridge Install ==="
+echo "=== FERRY Install ==="
 
 if [ "$DEV_MODE" = true ]; then
-  if [ ! -d "$EPIBRIDGE_HOME" ]; then
-    echo "ERROR: $EPIBRIDGE_HOME does not exist."
+  if [ ! -d "$FERRY_HOME" ]; then
+    echo "ERROR: $FERRY_HOME does not exist."
     echo "In --dev mode the source tree must be mounted or symlinked before running install.sh."
     exit 1
   fi
 else
-  if [ ! -d "$EPIBRIDGE_HOME" ]; then
-    echo "Creating $EPIBRIDGE_HOME"
-    mkdir -p "$EPIBRIDGE_HOME"
+  if [ ! -d "$FERRY_HOME" ]; then
+    echo "Creating $FERRY_HOME"
+    mkdir -p "$FERRY_HOME"
   fi
 
   # Clone or update repository
-  if [ -d "$EPIBRIDGE_HOME/.git" ]; then
+  if [ -d "$FERRY_HOME/.git" ]; then
     echo "Updating repository..."
-    cd "$EPIBRIDGE_HOME"
+    cd "$FERRY_HOME"
     git fetch origin
     git checkout "$BRANCH"
     git pull origin "$BRANCH"
   else
     echo "Cloning repository..."
-    git clone --branch "$BRANCH" "$REPO_URL" "$EPIBRIDGE_HOME"
+    git clone --branch "$BRANCH" "$REPO_URL" "$FERRY_HOME"
   fi
 fi
 
-cd "$EPIBRIDGE_HOME"
+cd "$FERRY_HOME"
 
 # Initialise configuration (idempotent — safe if .env already exists)
 ./scripts/init-config.sh
