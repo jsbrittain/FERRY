@@ -40,5 +40,5 @@ exclude_patterns = [
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "sphinx_book_theme"
-# html_logo = "images/logo.png"
+html_logo = "images/ferry-white.png"
 
