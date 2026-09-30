@@ -1,6 +1,7 @@
-# FERRY
+![FERRY](images/ferry-wide-white.png)
+<center><b>F</b>ederated <b>E</b>xecution for <b>R</b>eproducible <b>R</b>emote Anal<b>y</b>sis</center><br />
 
-Documentation for FERRY, a secure remote analysis platform for sensitive epidemiological data.
+A secure remote analysis platform for sensitive epidemiological data.
 
 ```{toctree}
 :caption: Getting Started

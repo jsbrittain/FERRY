@@ -1,5 +1,8 @@
-# FERRY
+![FERRY](docs/images/ferry-wide-white.png)
+<center><b>F</b>ederated <b>E</b>xecution for <b>R</b>eproducible <b>R</b>emote Anal<b>y</b>sis
+
 [![FERRY](https://github.com/kraemer-lab/FERRY/actions/workflows/ferry.yml/badge.svg)](https://github.com/kraemer-lab/FERRY/actions/workflows/ferry.yml) [![Documentation Status](https://readthedocs.org/projects/ferry/badge/?version=latest)](https://ferry.readthedocs.io/en/latest/?badge=latest)
+</center>
 
 Documentation: [ReadTheDocs](https://ferry.readthedocs.io/en/latest)
 
