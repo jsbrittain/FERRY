@@ -31,7 +31,10 @@ def test_settings_database_url_property():
         redis_password="rpw",
         secret_key=LONG_KEY,
     )
-    assert s.database_url == "postgresql://custom:pw@db.example.com:15432/custom_db"
+    assert (
+        s.database_url
+        == "postgresql+psycopg2://custom:pw@db.example.com:15432/custom_db"
+    )
 
 
 def test_settings_env_file_config():
